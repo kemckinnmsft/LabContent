@@ -603,6 +603,7 @@ In this task, we will modify the AIP scanner Profile to enforce the conditions w
 	1. [] Switch to @lab.VirtualMachine(Scanner01).SelectLink and log in with the password +++@lab.VirtualMachine(Scanner01).Password+++.
 
 	1. [] In an Administrative PowerShell window, run the ```Start-AIPScan``` command.
+
 ---
 
 ## Reviewing Protected Documents 
@@ -691,7 +692,7 @@ In this lab you have successfully completed the exercises below.
 - Review of protected Office and Adobe PDF documents
 - Review of the new Azure Log Analytics Dashboards
 
-> [ninja-cat]: !IMAGE[cat](\Media\ninjacat.png)
+> !IMAGE[cat](\Media\ninjacat.png)
 
 !INSTRUCTIONS[https://blogs.msdn.microsoft.com/oldnewthing/20160804-00/?p=94025][ninja-cat]
 https://blogs.msdn.microsoft.com/oldnewthing/20160804-00/?p=94025
