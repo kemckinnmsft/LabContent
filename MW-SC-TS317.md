@@ -263,42 +263,141 @@ In this exercise, we will configure an AIP scanner profile in the Azure portal a
 - [AIP Scanner Setup](#aip-scanner-setup)
 
 ---
+## AIP Scanner Profile Configuration
+
+The new AIP scanner preview client (1.45.32.0) and future GA releases will use the Azure portal central management user interface.  You are now able to manage multiple scanners without the need to sign in to the Windows computers running the scanner, set whether the scanner runs in Discovery or Enforcement mode, configure which sensitive information types are discovered and set repository related settings, like file types scanner, default label etc. Configuration from the Azure portal helps your deployments be more centralized, manageable, and scalable.
+
+> !IMAGE[ScannerUI](\Media\ScannerUI.png)
+
+To make the admin’s life easier we created a repository default that can be set one time on the profile level and can be reused for all added repositories. You can still adjust settings for each repository in case you have a repository that requires some special treatment. 
+
+The AIP scanner operational UI helps you run your operations remotely using a few simple clicks.  Now you can:
+
+- Monitor the status of all scanner nodes in the organization in a single place
+- Get scanner version and scanning statistics
+- Initiate on-demand incremental scans or run full rescans without having to sign in to the computers running the scanners
+
+> !IMAGE[ScannerUI2](\Media\ScannerUI2.png)
+
+In this task, we will configure the repository default and add a new profile with the repositories we want to scan.
+
+1. [] On @lab.VirtualMachine(Client01).SelectLink, in the Azure Information Protection blade, under **Scanner**, click **Nodes**.
+
+	> !IMAGE[ScannerProfiles](\Media\ScannerProfiles.png)
+
+	> [!NOTE] If the Azure portal is not already open, navigate to ```https://aka.ms/ScannerProfiles``` and log in with the credentials below.
+	>
+	> ```@lab.CloudCredential(17).Username```
+	>
+	> ```@lab.CloudCredential(17).Password```
+
+1. [] In the Scanner Profiles blade, click the **+ Add** button.
+
+1. [] In the Add a new profile blade, enter ```East US``` for the **Proflie name**.
+
+	> [!Note] The default **Schedule** is set to **Manual**, and **Info types to be discovered** is set to **All**.
+
+1. [] Under **Policy Enforcement**, set the **Enforce** switch to **Off**.
+
+1. [] Note the various additional settings, but **do not modify them**. Click **Save** to complete initial configuration.
+
+	> [!KNOWLEDGE] For additional information on the options available for the AIP scanner profile, 
+
+1. [] Once the save is complete, click on **Configure repositories**.
+
+	> !Image[ConfigRepo](\Media\ConfigRepo.png)
+
+1. [] In the Repositories blade, click the **+ Add** button.
+
+1. [] In the Repository blade, under **Path**, type ```\\Scanner01\documents```.
+
+1. [] Under Policy enforcement, make the modification shown in the table below.
+
+	|Policy|Value|
+	|-----|-----|
+	|**Default label**|**Custom**|
+	||**Confidential \ All Employees**|
+	|**Default owner**|**Custom**|
+	||**@lab.CloudCredential(17).UserName**|
+
+	> !IMAGE[Repo](\Media\Repo.png)
+
+1. [] Click **Save**.
+
+1. [] In the Repositories blade, click the **+ Add** button.
+
+1. [] In the Repository blade, under **Path**, type ```http://Scanner01/documents```.
+
+1. [] Leave all policies at Profile default, and click **Save**.
+
+---
 ## AIP Scanner Setup
 
-In this task we will install the AIP scanner binaries and create the Azure AD Applications necessary for authentication.
+In this task we will use a script to install the AIP scanner service and create the Azure AD Authentication Token necessary for authentication.
 
 ### Installing the AIP Scanner Service
 
 The first step in configuring the AIP Scanner is to install the service and connect the database.  This is done with the Install-AIPScanner cmdlet that is provided by the AIP Client software.  The AIPScanner service account has been pre-staged in Active Directory for convenience.
 
-1. [] Switch to @lab.VirtualMachine(Scanner01).SelectLink and log in using the password +++@lab.VirtualMachine(Client01).Password+++.
+1. [] Switch to @lab.VirtualMachine(Scanner01).SelectLink and log in using the Credentials below.
 
-1. [] Open an **Administrative PowerShell Window** and type ```C:\Users\LabUser\Desktop\InstallScanner.ps1``` and press **Enter**. 
+	> +++AIP Scanner+++
+	>
+	> +++SomePass1+++
 
-1. [] In the popup box, click **OK** to accept the default of **Scanner01**.
+1. [] Open an **Administrative PowerShell Window** and type ```C:\Scripts\InstallScannerPreview.ps1``` and press **Enter**. 
+
+1. [] In the popup box, click **OK** to accept the default Profile value **East US**.
 
 	> [!NOTE] We have preconfigured SQL Server on Scanner01 with a **default instance**. If using a **named instance** or **SQL Server Express**, you would populate this with **ServerName\\InstanceName** or **ServerName\\SqlExpress** respectively.
 
-3. [] When prompted, provide the credentials for the **local** AIP scanner service account.
-	
-	```Contoso\AIPScanner```
-
-	```Somepass1```
-
-	^IMAGE[Open Screenshot](\Media\pc9myg9x.jpg)
-
-	> [!KNOWLEDGE] This script installs the AIP scanner Service account using the **local domain user** account provisioned for the AIP Scanner. This account will need to be provided **read** access to **all repositories** that need to be scanned during **discovery**.  
+	> [!KNOWLEDGE] This script installs the AIP scanner Service using the **local domain user** account (Contoso\\AIPScanner) provisioned for the AIP Scanner. This account will need to be provided **read** access to **all repositories** that need to be scanned during **discovery**.  
 	>
 	> When you begin **classifying and labeling** files with the AIP scanner, this account will also need **write** access to the repositories, so this is something you should consider during rights assignment. 
 	>
-	> This script will run the code below. This script is available online at https://aka.ms/labscripts
-	>
+	> This script will run the code below. This script is available online as Install-ScannerPreview.ps1 at https://aka.ms/labscripts
+	> 
 	> Add-Type -AssemblyName Microsoft.VisualBasic
 	> 
-	> $SQL = [Microsoft.VisualBasic.Interaction]::InputBox('Enter the name of your SQL Server or Server\Instance', 'SQL Server', "Scanner01")
+	> $daU = "contoso\AIPScanner"
+	> $daP = "Somepass1" | ConvertTo-SecureString -AsPlainText -Force
+	> $dacred = New-Object System.Management.Automation.PSCredential -ArgumentList $daU, $daP
+	> 	
+	> $gacred = get-credential -Message "Enter Global Admin Credentials"
+	> 	
+	> Connect-AzureAD -Credential $gacred
+	> 	
+	> $SQL = "Scanner01"
+	> 	
+	> $ScProfile = [Microsoft.VisualBasic.Interaction]::InputBox('Enter the name of your configured AIP Scanner Profile', 'AIP Scanner Profile', "East US")
+	> 	
+	> Install-AIPScanner -ServiceUserCredentials $dacred -SqlServerInstance $SQL -Profile $ScProfile
+	> 	
+	> $Date = Get-Date -UFormat %m%d%H%M
+	> $DisplayName = "AIPOBO" + $Date
+	> $CKI = "AIPClient" + $Date
+	> 	
+	> New-AzureADApplication -DisplayName $DisplayName -ReplyUrls http://localhost
+	> $WebApp = Get-AzureADApplication -Filter "DisplayName eq $DisplayName"
+	> New-AzureADServicePrincipal -AppId $WebApp.AppId
+	> $WebAppKey = New-Guid
+	> $Date = Get-Date
+	> New-AzureADApplicationPasswordCredential -ObjectId $WebApp.ObjectID -startDate $Date -endDate $Date.AddYears(1) -Value $WebAppKey.Guid -CustomKeyIdentifier $CKI
+	> 	
+	> $AIPServicePrincipal = Get-AzureADServicePrincipal -All $true | Where-Object { $_.DisplayName -eq $DisplayName }
+	> $AIPPermissions = $AIPServicePrincipal | Select-Object -expand Oauth2Permissions
+	> $Scope = New-Object -TypeName "Microsoft.Open.AzureAD.Model.ResourceAccess" -ArgumentList $AIPPermissions.Id, "Scope"
+	> $Access = New-Object -TypeName "Microsoft.Open.AzureAD.Model.RequiredResourceAccess"
+	> $Access.ResourceAppId = $WebApp.AppId
+	> $Access.ResourceAccess = $Scope
+	> 	
+	> New-AzureADApplication -DisplayName $CKI -ReplyURLs http://localhost -RequiredResourceAccess $Access -PublicClient $true
+	> $NativeApp = Get-AzureADApplication -Filter "DisplayName eq $CKI"
+	> New-AzureADServicePrincipal -AppId $NativeApp.AppId
+	> 	
+	> Set-AIPAuthentication -WebAppID $WebApp.AppId + -WebAppKey $WebAppKey.Guid -NativeAppID $NativeApp.AppId
 	>
-	> Install-AIPScanner -SQLServerInstance $SQL
-	
+	> Restart-Service AIPScanner
 	^IMAGE[Open Screenshot](\Media\w7goqgop.jpg)
 
 ### Creating Azure AD Applications for the AIP Scanner
@@ -373,82 +472,6 @@ Now that you have installed the scanner service, you need to get an Azure AD tok
 	```Restart-Service AIPScanner```
    
 ---
-
-## Configuring AIP Scanner Profile 
-[:arrow_up: Top](#configuring-aip-scanner-for-discovery)
-
-In this task, we will configure repositories to be scanned by the AIP scanner.  As previously mentioned, these can be any type of CIFS file shares including NAS devices sharing over the CIFS protocol.  Additionally, On premises SharePoint 2010, 2013, and 2016 document libraries and lists (attachements) can be scanned.  You can even scan entire SharePoint sites by providing the root URL of the site.  There are several optional 
-
-> [!NOTE] SharePoint 2010 is only supported for customers who have extended support for that version of SharePoint.
-
-The next task is to configure repositories to scan.  These can be on-premises SharePoint 2010, 2013, or 2016 document libraries and any accessible CIFS based share.
-
-1. [] In the Administrative PowerShell window on Scanner01, run the commands below
-
-    ```
-    Add-AIPScannerRepository -Path http://Scanner01/documents -SetDefaultLabel Off
-	```
-	```
-	Add-AIPScannerRepository -Path \\Scanner01\documents -SetDefaultLabel Off
-    ```
-	>[!Knowledge] Notice that we added the **-SetDefaultLabel Off** switch to each of these repositories.  This is necessary because our Global policy has a Default label of **General**.  If we did not add this switch, any file that did not match a condition would be labeled as General when we do the enforced scan.
-
-	^IMAGE[Open Screenshot](\Media\00niixfd.jpg)
-1. [] To verify the repositories configured, run the command below.
-	
-    ```
-    Get-AIPScannerRepository
-    ```
-	^IMAGE[Open Screenshot](\Media\n5hj5e7j.jpg)
-
----
-
-## Running Sensitive Data Discovery 
-[:arrow_up: Top](#configuring-aip-scanner-for-discovery)
-
-1. [] Run the commands below to run a discovery cycle.
-
-    ```
-	Set-AIPScannerConfiguration -DiscoverInformationTypes All -Enforce Off
-	```
-	```
-	Start-AIPScan
-    ```
-
-	> [!Knowledge] Note that we used the DiscoverInformationTypes -All switch before starting the scan.  This causes the scanner to use any custom conditions that you have specified for labels in the Azure Information Protection policy, and the list of information types that are available to specify for labels in the Azure Information Protection policy.  Although the scanner will discover documents to classify, it will not do so because the default configuration for the scanner is Discover only mode.
-	
-1. [] Right-click on the **Windows** button in the lower left-hand corner and click on **Event Viewer**.
-
-	^IMAGE[Open Screenshot](\Media\cjvmhaf0.jpg)
-1. [] Expand **Application and Services Logs** and click on **Azure Information Protection**.
-
-	^IMAGE[Open Screenshot](\Media\dy6mnnpv.jpg)
-
-	>[!NOTE] You will see an event like the one below when the scanner completes the cycle. If you see a .NET exception, press OK. This is due to SharePoint startup in the VM environment.
-	>
-	>!IMAGE[agnx2gws.jpg](\Media\agnx2gws.jpg)
-
-1. [] Next, switch to @lab.VirtualMachine(Client01).SelectLink and log in using the password +++@lab.VirtualMachine(Client01).Password+++.
-1. [] Open a **File Explorer** window, and browse to ```\\Scanner01.contoso.azure\c$\users\aipscanner\AppData\Local\Microsoft\MSIP\Scanner\Reports```. Use the credentials below to authenticate:
-
-	```Contoso\LabUser```
-	
-	```Pa$$w0rd```
-
-1. [] Review the summary txt and detailed csv files available there.  
-
-	>[!Hint] Since there are no Automatic conditions configured yet, the scanner found no matches for the files scanned despite most of them containing sensitive data.
-	>
-	>!IMAGE[aukjn7zr.jpg](\Media\aukjn7zr.jpg)
-	>
-	>The details contained in the DetailedReport.csv can be used to identify the types of sensitive data you need to create AIP rules for in the Azure Portal.
-	>
-	>!IMAGE[9y52ab7u.jpg](\Media\9y52ab7u.jpg)
-
-	>[!NOTE] We will revisit this information later in the lab to review discovered data and create Sensitive Data Type to Classification mappings.
-
-	>[!ALERT] If you see any failures, it is likely due to SharePoint startup in the VM environment.  If you rerun Start-AIPScan on Scanner01 all files will successfully scan.  This should not happen in a production environment.
-	
 
 ===
 # Defining Recommended and Automatic Conditions 
