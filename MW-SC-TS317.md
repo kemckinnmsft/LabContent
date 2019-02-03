@@ -257,10 +257,10 @@ Even before configuring an AIP classification taxonomy, customers can scan and i
 
 Often, this can help drive an appropriate level of urgency and attention to the risk customers face if they delay rolling out AIP classification and protection.  
 
-In this exercise, we will install the AIP scanner and run it against repositories in discovery mode.  Later in this lab (after configuring labels and conditions) we will revisit the scanner to perform automated classification, labeling, and protection of sensitive documents. This Exercise will walk you through the items below.
+In this exercise, we will configure an AIP scanner profile in the Azure portal and install the AIP scanner. Initially, we will run the scanner against repositories in discovery mode.  Later in this lab (after configuring labels and conditions), we will revisit the scanner to perform automated classification, labeling, and protection of sensitive documents. This Exercise will walk you through the items below.
 
+- [AIP Scanner Profile Configuration](#aip-scanner-profile-configuration)
 - [AIP Scanner Setup](#aip-scanner-setup)
-- [Running Sensitive Data Discovery](#running-sensitive-data-discovery)
 
 ---
 ## AIP Scanner Setup
