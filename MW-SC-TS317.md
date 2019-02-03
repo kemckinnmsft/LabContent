@@ -305,7 +305,7 @@ In this task, we will configure the repository default and add a new profile wit
 
 1. [] Once the save is complete, click on **Configure repositories**.
 
-	> !IMAGE[ConfigRepo](\Media\ConfigRepo.png)
+	> !IMAGE[Configure Repository](\Media\ConfigRepo.png)
 
 1. [] In the Repositories blade, click the **+ Add** button.
 
@@ -318,7 +318,7 @@ In this task, we will configure the repository default and add a new profile wit
 	|**Default label**|**Custom**|
 	||**Confidential \ All Employees**|
 	|**Default owner**|**Custom**|
-	||**@lab.CloudCredential(17).UserName**|
+	||```@lab.CloudCredential(17).UserName```|
 
 	> !IMAGE[Repo](\Media\Repo.png)
 
