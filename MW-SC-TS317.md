@@ -84,7 +84,6 @@ In this task, we will create new Azure AD users and assign licenses via PowerShe
 1. [] Log into @lab.VirtualMachine(Scanner01).SelectLink using the password +++@lab.VirtualMachine(Client01).Password+++
 2. [] On the desktop, **right-click** on **AADConfig.ps1** and click **Run with PowerShell**.
 
-	!IMAGE[AADConfig](\Media\AADConfig.png)
 
 	> [!NOTE] If prompted to change the execution policy, type **y** and **Enter**.
 
@@ -215,7 +214,7 @@ In order to collect log data from Azure Information Protection clients and servi
 	>
 	> !IMAGE[ny3fd3da.jpg](\Media\ny3fd3da.jpg)
 
-	> [!KNOWLEDGE] You should automatically be loggeed into the azure portal.  If not, navigate to ```https://portal.azure.com/``` and log in with the credentials below.
+	> [!KNOWLEDGE] You should automatically be logged into the azure portal.  If not, navigate to ```https://portal.azure.com/``` and log in with the credentials below.
 	>
 	>```@lab.CloudCredential(17).Username``` 
 	>
@@ -234,7 +233,7 @@ In order to collect log data from Azure Information Protection clients and servi
 	|Resource Group|```AIP-RG```|
 	|Location|**East US** (Or a location near the event)|
 
-	> [!HINT] The OMS Workspace name must be unique across all of Azure. The name is not relevant for this lab, so feel free to use random characters.
+	> [!HINT] The OMS **Workspace name** must be **unique across all of Azure**. The name is not relevant for this lab, so feel free to use random characters.
 
 	^IMAGE[Open Screenshot](\Media\5butui15.jpg)
 1. [] Next, back in the Configure analytics (preview) blade, **check the boxes** next to the **workspace** and next to **Enable Content Matches** and click **OK**.
