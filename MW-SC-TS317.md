@@ -305,7 +305,7 @@ In this task, we will configure the repository default and add a new profile wit
 
 1. [] Once the save is complete, click on **Configure repositories**.
 
-	> !Image[ConfigRepo](\Media\ConfigRepo.png)
+	> !IMAGE[ConfigRepo](\Media\ConfigRepo.png)
 
 1. [] In the Repositories blade, click the **+ Add** button.
 
