@@ -343,7 +343,7 @@ The first step in configuring the AIP Scanner is to install the service and conn
 
 	> +++AIP Scanner+++
 	>
-	> +++SomePass1+++
+	> +++Somepass1+++
 
 1. [] Open an **Administrative PowerShell Window** and type ```C:\Scripts\Install-ScannerPreview.ps1``` and press **Enter**. 
 
@@ -406,77 +406,18 @@ The first step in configuring the AIP Scanner is to install the service and conn
 	> Restart-Service AIPScanner
 	^IMAGE[Open Screenshot](\Media\w7goqgop.jpg)
 
-### Creating Azure AD Applications for the AIP Scanner
+1. [] When prompted, enter the AIP Scanner cloud credentials below:
 
-Now that you have installed the scanner service, you need to get an Azure AD token for the scanner service account to authenticate so that it can run unattended. This requires registering both a Web app and a Native app in Azure Active Directory.  The commands below will do this in an automated fashion rather than needing to go into the Azure portal directly.
-
-1. [] Next, on the desktop, right-click on **GenerateAuthToken.ps1** and click **Run with PowerShell**.
-1. [] When prompted, provide the username and password below. 
-	
-	```@lab.CloudCredential(134).Username```
-	
-	```@lab.CloudCredential(134).Password```
-
-	> [!HINT] This will create a new **Web App Registration**, **Native App Registration**, and associated **Service Principals** in Azure AD. 
+	> ```AIPScanner@@lab.CloudCredential(17).Tenant```
 	>
-	> Next, the script will output a new text file containing the **Set-AIPAuthentication** command and the **required values to generate the authentication token** for **any** AIP scanner server in an environment.
-	
-	> [!KNOWLEDGE] This script will run the code below. This script is available online at https://aka.ms/labscripts
-	>
-	> New-AzureADApplication -DisplayName AIPOnBehalfOf -ReplyUrls http://localhost
-	> $WebApp = Get-AzureADApplication -Filter "DisplayName eq 'AIPOnBehalfOf'"
-	> New-AzureADServicePrincipal -AppId $WebApp.AppId
-	> $WebAppKey = New-Guid
-	> $Date = Get-Date
-	> New-AzureADApplicationPasswordCredential -ObjectId $WebApp.ObjectID -startDate $Date -endDate $Date.AddYears(1) -Value $WebAppKey.Guid -CustomKeyIdentifier "AIPClient"
-	>
-	> $AIPServicePrincipal = Get-AzureADServicePrincipal -All $true | ? {$_.DisplayName -eq 'AIPOnBehalfOf'}
-	> $AIPPermissions = $AIPServicePrincipal | select -expand Oauth2Permissions
-	> $Scope = New-Object -TypeName "Microsoft.Open.AzureAD.Model.ResourceAccess" -ArgumentList $AIPPermissions.Id,"Scope"
-	> $Access = New-Object -TypeName "Microsoft.Open.AzureAD.Model.RequiredResourceAccess"
-	> $Access.ResourceAppId = $WebApp.AppId
-	> $Access.ResourceAccess = $Scope
-	>
-	> New-AzureADApplication -DisplayName AIPClient -ReplyURLs http://localhost -RequiredResourceAccess $Access -PublicClient $true
-	> $NativeApp = Get-AzureADApplication -Filter "DisplayName eq 'AIPClient'"
-	> New-AzureADServicePrincipal -AppId $NativeApp.AppId
-	>
-    > "Set-AIPAuthentication -WebAppID " + $WebApp.AppId + " -WebAppKey " + $WebAppKey.Guid + " -NativeAppID " + $NativeApp.AppId | Out-File ~\Desktop\Set-AIPAuthentication.txt
-	> Start ~\Desktop\Set-AIPAuthentication.txt
-
-1. [] Leave the notepad window open in the background.
-1. [] **Click on the Start menu** and type ```PowerShell```, right-click on the PowerShell program, and click **Run as a different user**.
-
-	!IMAGE[zgt5ikxl.jpg](\Media\zgt5ikxl.jpg)
-
-1. [] When prompted, enter the username and password below and click **OK**.
-
-	```Contoso\AIPScanner``` 
-
-	```Somepass1```
-
-1. [] Return to the **Notepad** window and copy the **full Set-AIPAuthentication** command into this window and run it.
-1. [] When prompted, enter the username and password below:
-
-	```AIPScanner@@lab.CloudCredential(134).TenantName```
-
-	```Somepass1```
+	> ```Somepass1```
 
 	^IMAGE[Open Screenshot](\Media\qfxn64vb.jpg)
 
 1. [] In the Permissions requested window, click **Accept**.
 
-   !IMAGE[nucv27wb.jpg](\Media\nucv27wb.jpg)
-   
-	>[!knowledge] You will a message like the one below in the PowerShell window once complete.
-	>
-	>!IMAGE[y2bgsabe.jpg](\Media\y2bgsabe.jpg)
+   > !IMAGE[nucv27wb.jpg](\Media\nucv27wb.jpg)
 
-1. [] **Close the PowerShell window**.
-1. [] Next, in the **Admin PowerShell window**, run the command below.
-
-	```Restart-Service AIPScanner```
-   
 ---
 
 ===
