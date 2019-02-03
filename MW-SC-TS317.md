@@ -311,7 +311,7 @@ In this task, we will configure the repository default and add a new profile wit
 
 1. [] In the Repository blade, under **Path**, type ```\\Scanner01\documents```.
 
-1. [] Under Policy enforcement, make the modification shown in the table below.
+1. [] Under Policy enforcement, make the modifications shown in the table below.
 
 	|Policy|Value|
 	|-----|-----|
@@ -345,7 +345,13 @@ The first step in configuring the AIP Scanner is to install the service and conn
 	>
 	> +++SomePass1+++
 
-1. [] Open an **Administrative PowerShell Window** and type ```C:\Scripts\InstallScannerPreview.ps1``` and press **Enter**. 
+1. [] Open an **Administrative PowerShell Window** and type ```C:\Scripts\Install-ScannerPreview.ps1``` and press **Enter**. 
+
+1. [] When prompted, enter the Global Admin credentials below:
+
+	> ```@lab.CloudCredential(17).Username```
+	>
+	> ```@lab.CloudCredential(17).Password```
 
 1. [] In the popup box, click **OK** to accept the default Profile value **East US**.
 
