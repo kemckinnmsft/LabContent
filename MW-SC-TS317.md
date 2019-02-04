@@ -1,5 +1,6 @@
 # Azure Information Protection New and Advanced Features
-## Microsoft Ready Technical Lab MW-SC-TS317
+### Microsoft Ready Technical Lab 
+## MW-SC-TS317
 
 ### Introduction
 
@@ -27,9 +28,9 @@ Before working on this lab, you must have:
 
 This lab is designed to be completed on Windows 10 VM with the following characteristics:
 
-- Windows 10 Enterprise
+- Windows 10 Enterprise / Windows Server 2016
 - Office 365 ProPlus
-- Azure Information Protection Client (1.41.51.0)
+- Azure Information Protection Client (1.45.32.0)
 
 Microsoft 365 E5 Tenant credentials will be provided during the event.  If you want to run through this lab after the event, you may use a tenant created through https://demos.microsoft.com or your own Microsoft 365 Tenant. This Lab Guide will be publicly available after the event at https://aka.ms/AIPHOL2.
 
@@ -78,7 +79,7 @@ There are a few prerequisites that need to be set up to complete all the section
 
 ---
 # Azure AD User Configuration
-[:arrow_left: Home](#lab-environment-configuration)
+[:arrow_up: Top](#lab-environment-configuration)
 
 In this task, we will create new Azure AD users and assign licenses via PowerShell.  In a procduction evironment this would be done using Azure AD Connect or a similar tool to maintain a single source of authority, but for lab purposes we are doing it via script to reduce setup time.
 
@@ -199,6 +200,7 @@ For several of the exercises in this lab series, you will require an active subs
 
 ---
 ## Configuring Azure Log Analytics 
+[:arrow_up: Top](#lab-environment-configuration)
 
 In order to collect log data from Azure Information Protection clients and services, you must first configure the log analytics workspace.
 
@@ -246,7 +248,7 @@ In order to collect log data from Azure Information Protection clients and servi
 
 ===
 # Configuring AIP Scanner for Discovery
-[:arrow_left: Home](#introduction) 
+[:arrow_left: Home](#azure-information-protection)
 
 Even before configuring an AIP classification taxonomy, customers can scan and identify files containing sensitive information based on the built-in sensitive information types included in the Microsoft Classification Engine.  
 
@@ -261,6 +263,7 @@ In this exercise, we will configure an AIP scanner profile in the Azure portal a
 
 ---
 ## AIP Scanner Profile Configuration
+[:arrow_up: Top](#configuring-aip-scanner-for-discovery)
 
 The new AIP scanner preview client (1.45.32.0) and future GA releases will use the Azure portal central management user interface.  You are now able to manage multiple scanners without the need to sign in to the Windows computers running the scanner, set whether the scanner runs in Discovery or Enforcement mode, configure which sensitive information types are discovered and set repository related settings, like file types scanner, default label etc. Configuration from the Azure portal helps your deployments be more centralized, manageable, and scalable.
 
@@ -329,6 +332,7 @@ In this task, we will configure the repository default and add a new profile wit
 
 ---
 ## AIP Scanner Setup
+[:arrow_up: Top](#configuring-aip-scanner-for-discovery)
 
 In this task we will use a script to install the AIP scanner service and create the Azure AD Authentication Token necessary for authentication.
 
@@ -415,7 +419,7 @@ The first step in configuring the AIP Scanner is to install the service and conn
 
 ===
 # Defining Automatic Conditions 
-[:arrow_left: Home](#introduction)
+[:arrow_left: Home](#azure-information-protection)
 
 One of the most powerful features of Azure Information Protection is the ability to guide your users in making sound decisions around safeguarding sensitive data.  This can be achieved in many ways through user education or reactive events such as blocking emails containing sensitive data. 
 
@@ -490,6 +494,7 @@ Although we will not be demonstrating these capabilities in this lab, you can us
 
 ---
 ## Activating Unified Labeling
+[:arrow_up: Top](#security-and-compliance-center)
 
 In this task, we will activate the labels from the Azure Portal for use in the Security and Compliance Center.
 
@@ -511,6 +516,7 @@ In this task, we will activate the labels from the Azure Portal for use in the S
 
 ---
 ## Deploying Policy in SCC
+[:arrow_up: Top](#security-and-compliance-center)
 
 The previous step enabled the AIP labels for use in the Security and Compliance Center.  However, this did not also recreate the policies from the AIP portal. In this step we will publish a Global policy like the one we used in the AIP portal for use with unified clients.
 
@@ -566,6 +572,7 @@ In this exercise, we will run the AIP Scanner in enforce mode to classify and pr
 ---
 
 ## Enforcing Configured Rules 
+[:arrow_up: Top](#classification-labeling-and-protection-with-the-azure-information-protection-scanner)
 
 In this task, we will modify the AIP scanner Profile to enforce the conditions we set up and have it run on all files using the Start-AIPScan command.
 
@@ -696,7 +703,7 @@ We can now go back and look at the dashboards and observe how they have changed.
 
 ===
 # AIP Lab Complete 
-[:arrow_left: Home](#introduction)
+[:arrow_left: Home](#azure-information-protection)
 
 Congratulations! You have completed the Azure Information Protection Hands on Lab. 
 
