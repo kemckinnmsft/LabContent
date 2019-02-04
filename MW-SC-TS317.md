@@ -39,13 +39,14 @@ Microsoft 365 E5 Tenant credentials will be provided during the event.  If you w
 
 # Azure Information Protection
 [:arrow_left: Home](#introduction)
+
 ## Overview
 
 Azure Information Protection (AIP) is a cloud-based solution that can help organizations to protect sensitive information by classifying and (optionally) encrypting documents and emails on Windows, Mac, and Mobile devices. This is done using an organization defined classification taxonomy made up of labels and sub-labels. These labels may be applied manually by users, or automatically by administrators via defined rules and conditions.
 
 The phases of AIP are shown in the graphic below.  
 
-!IMAGE[Phases.png](\Media\Phases.png)
+> !IMAGE[Phases.png](\Media\Phases.png)
 
 In this lab, we will guide you through addressing all of these phases using some of the newest features of AIP.  We first will perform Discovery using the AIP scanner. We recommend that all customers do this step as it only requires AIP P1 licensing and can help to show customers the risk they are currently facing so they can properly prioritize their security investments. 
 
@@ -244,7 +245,8 @@ In order to collect log data from Azure Information Protection clients and servi
 ---
 
 ===
-# Configuring AIP Scanner for Discovery 
+# Configuring AIP Scanner for Discovery
+[:arrow_left: Home](#introduction) 
 
 Even before configuring an AIP classification taxonomy, customers can scan and identify files containing sensitive information based on the built-in sensitive information types included in the Microsoft Classification Engine.  
 
@@ -691,11 +693,11 @@ We can now go back and look at the dashboards and observe how they have changed.
 
 ===
 # AIP Lab Complete 
-[:arrow_left: Home](#azure-information-protection)
+[:arrow_left: Home](#introduction)
 
 Congratulations! You have completed the Azure Information Protection Hands on Lab. 
 
-In this lab you have successfully completed the exercises below.
+In this lab, you have successfully completed the exercises below covering the four phases of the Information Protection Lifecycle.  We first Discovered and Classified information using the AIP scanner. We showed how to enable unified labeling for use with Mac, Mobile, and 3rd party applications like Adobe Acrobat.  We then Labeled and Protected documents with the AIP scanner in Enforce mode. Finally, we reviewed the Monitoring using Azure Log Analytics and the new AIP Dashboards.
 
 - Sensitive data Discovery using the AIP scanner and the new cloud UI
 - Enabling Sensitivity Labels in the Microsoft 365 Security and Compliance Center
@@ -703,6 +705,8 @@ In this lab you have successfully completed the exercises below.
 - Automatic Classification and Protection of sensitive data using the AIP scanner
 - Review of protected Office and Adobe PDF documents
 - Review of the new Azure Log Analytics Dashboards
+
+We hope you enjoyed this lab! Please fill out the survey and let us know what was valuable and what was not so that we may improve the experience for future labs. Thanks!
 
 > !IMAGE[cat](\Media\ninjacat.png)
 
