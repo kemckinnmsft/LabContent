@@ -86,17 +86,17 @@ In this task, we will create new Azure AD users and assign licenses via PowerShe
 1. [] Log into @lab.VirtualMachine(Scanner01).SelectLink using the password +++Somepass1+++
 2. [] Open an **Administrative PowerShell Prompt** and run ```C:\Scripts\AADConfig.ps1```.
 
-1. [] When prompted for the **Tenant name**, **click in the text box** and enter ```@lab.CloudCredential(17).TenantName```.
+1. [] When prompted for the **Tenant name**, **click in the text box** and enter ```@lab.CloudCredential(139).TenantName```.
 1. [] When prompted, provide the credentials below:
 
-	```@lab.CloudCredential(17).Username```
+	```@lab.CloudCredential(139).Username```
 
-	```@lab.CloudCredential(17).Password``` 
+	```@lab.CloudCredential(139).Password``` 
    
 	> [!KNOWLEDGE] We are running the PowerShell code below to create the accounts and groups in AAD and assign licenses for EMS E5 and Office E5. This script is also available at [https://aka.ms/labscripts](https://aka.ms/labscripts) as AADConfig.ps1.
     > 
     > #### Azure AD User and Group Configuration
-    > $tenantfqdn = "@lab.CloudCredential(17).TenantName"
+    > $tenantfqdn = "@lab.CloudCredential(139).TenantName"
     > $tenant = $tenantfqdn.Split('.')[0]
 	> 
     > #### Build Licensing SKUs
@@ -173,9 +173,9 @@ For several of the exercises in this lab series, you will require an active subs
 	> !IMAGE[wdir7lb3.jpg](\Media\wdir7lb3.jpg)
 1. [] Log in using the credentials below.
 
-	```@lab.CloudCredential(17).Username```
+	```@lab.CloudCredential(139).Username```
 
-	```@lab.CloudCredential(17).Password``` 
+	```@lab.CloudCredential(139).Password``` 
 
 1. [] Click **Confirm** if the correct email address is listed.
 
@@ -214,9 +214,9 @@ In order to collect log data from Azure Information Protection clients and servi
 
 	> [!KNOWLEDGE] You should automatically be logged into the azure portal.  If not, navigate to ```https://portal.azure.com/``` and log in with the credentials below.
 	>
-	>```@lab.CloudCredential(17).Username``` 
+	>```@lab.CloudCredential(139).Username``` 
 	>
-	>```@lab.CloudCredential(17).Password```
+	>```@lab.CloudCredential(139).Password```
 
 1. [] In the Azure Information Protection blade, under **Manage**, click **Configure analytics (preview)**.
 
@@ -287,9 +287,9 @@ In this task, we will configure the repository default and add a new profile wit
 
 	> [!NOTE] If the Azure portal is not already open, navigate to ```https://aka.ms/ScannerProfiles``` and log in with the credentials below.
 	>
-	> ```@lab.CloudCredential(17).Username```
+	> ```@lab.CloudCredential(139).Username```
 	>
-	> ```@lab.CloudCredential(17).Password```
+	> ```@lab.CloudCredential(139).Password```
 
 1. [] In the Scanner Profiles blade, click the **+ Add** button.
 
@@ -318,7 +318,7 @@ In this task, we will configure the repository default and add a new profile wit
 	|**Default label**|**Custom**|
 	||**Confidential \ All Employees**|
 	|**Default owner**|**Custom**|
-	||```@lab.CloudCredential(17).UserName```|
+	||```@lab.CloudCredential(139).UserName```|
 
 	> !IMAGE[Repo](\Media\Repo.png)
 
@@ -399,15 +399,15 @@ The first step in configuring the AIP Scanner is to install the service and conn
 
 1. [] When prompted, enter the Global Admin credentials below:
 
-	> ```@lab.CloudCredential(17).Username```
+	> ```@lab.CloudCredential(139).Username```
 	>
-	> ```@lab.CloudCredential(17).Password```
+	> ```@lab.CloudCredential(139).Password```
 
 1. [] In the popup box, click **OK** to accept the default Profile value **East US**.
 
 1. [] When prompted, enter the AIP Scanner cloud credentials below:
 
-	> ```AIPScanner@@lab.CloudCredential(17).Tenant```
+	> ```AIPScanner@@lab.CloudCredential(139).Tenant```
 	>
 	> ```Somepass1```
 
@@ -418,7 +418,7 @@ The first step in configuring the AIP Scanner is to install the service and conn
 	> [!NOTE] An AIP scanner Discovery scan will start directly after aquiring the application access token.
 
 	> [!ALERT] If you see a **.NET exception**, press **OK**. This is due to SharePoint startup in the VM environment. This event **must be acknowledged** to complete the discovery scan.
-	
+
 ---
 
 ===
@@ -584,9 +584,9 @@ In this task, we will modify the AIP scanner Profile to enforce the conditions w
 
 	> [!NOTE] If needed, navigate to ```https://aka.ms/ScannerProfiles``` and log in with the credentials below:
 	>
-	> ```@lab.CloudCredential(17).Username```
+	> ```@lab.CloudCredential(139).Username```
 	>
-	> ```@lab.CloudCredential(17).Password```
+	> ```@lab.CloudCredential(139).Password```
 
 2. [] Click on the **East US** profile.
 
@@ -639,7 +639,7 @@ Now that we have Classified and Protected documents using the scanner, we can re
 3. [] Open one of the Contoso Purchasing Permissions documents.
 1. [] When prompted, provide the credentials below:
 
-	> ```EvanG@@lab.CloudCredential(17).TenantName```
+	> ```EvanG@@lab.CloudCredential(139).TenantName```
 	>
 	> ```pass@word1```
 
@@ -650,7 +650,7 @@ Now that we have Classified and Protected documents using the scanner, we can re
     > !IMAGE[s1okfpwu.jpg](\Media\HCAE.jpg)
 
 4. [] Next, in the same documents folder, open one of the pdf files.
-5. [] When prompted by Adobe, enter ```EvanG@@lab.CloudCredential(17).TenantName``` and press **Next**.
+5. [] When prompted by Adobe, enter ```EvanG@@lab.CloudCredential(139).TenantName``` and press **Next**.
 6. [] Check the box to save credentials and press **Yes**.
 1. [] Click **Accept** in the **Permissions requested** dialog.
 
