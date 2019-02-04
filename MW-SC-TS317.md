@@ -466,9 +466,9 @@ However, helping your users to properly classify and protect sensitive data at t
 	^IMAGE[Open Screenshot](\Media\ie6g5kta.jpg)
 1. [] In the Labels: All Employees blade, in the **Configure conditions for automatically applying this label** section, click **Automatic**.
 
-   > !IMAGE[245lpjvk.jpg](\Media\245lpjvk.jpg)
-   
-   > [!HINT] The policy tip is automatically updated when you switch the condition to Automatic.
+	> [!HINT] The policy tip is automatically updated when you switch the condition to Automatic.
+	>
+	> !IMAGE[245lpjvk.jpg](\Media\245lpjvk.jpg)
 
 1. [] Click **Save** in the Label: All Employees blade and **OK** to the Save settings prompt.
 
