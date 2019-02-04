@@ -413,8 +413,12 @@ The first step in configuring the AIP Scanner is to install the service and conn
 
 1. [] In the Permissions requested window, click **Accept**.
 
-   > !IMAGE[nucv27wb.jpg](\Media\nucv27wb.jpg)
+    > !IMAGE[nucv27wb.jpg](\Media\nucv27wb.jpg)
 
+	> [!NOTE] An AIP scanner Discovery scan will start directly after aquiring the application access token.
+
+	> [!ALERT] If you see a **.NET exception**, press **OK**. This is due to SharePoint startup in the VM environment. This event **must be acknowledged** to complete the discovery scan.
+	
 ---
 
 ===
