@@ -187,7 +187,7 @@ For several of the exercises in this lab series, you will require an active subs
 
 8. [] Scroll to the bottom of the page and click **Next**.
 
-    !IMAGE[ihrjazqi.jpg](\Media\ihrjazqi.jpg)
+    > !IMAGE[ihrjazqi.jpg](\Media\ihrjazqi.jpg)
 
 	>[!NOTE] You can keep the pre-populated information.
 
@@ -467,8 +467,8 @@ However, helping your users to properly classify and protect sensitive data at t
 1. [] In the Labels: All Employees blade, in the **Configure conditions for automatically applying this label** section, click **Automatic**.
 
    > !IMAGE[245lpjvk.jpg](\Media\245lpjvk.jpg)
-
-	> [!HINT] The policy tip is automatically updated when you switch the condition to Automatic.
+   
+   > [!HINT] The policy tip is automatically updated when you switch the condition to Automatic.
 
 1. [] Click **Save** in the Label: All Employees blade and **OK** to the Save settings prompt.
 
