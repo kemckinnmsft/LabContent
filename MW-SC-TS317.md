@@ -478,6 +478,8 @@ However, helping your users to properly classify and protect sensitive data at t
 
 	^IMAGE[Open Screenshot](\Media\wzwfc1l4.jpg)
 
+---
+
 ===
 # Security and Compliance Center 
 [:arrow_left: Home](#azure-information-protection)
@@ -539,6 +541,7 @@ The previous step enabled the AIP labels for use in the Security and Compliance 
 10. [] Check the box next to Users must provide justification to remove a label or lower classification label and click the Next button.
 
 	> !IMAGE[Open Screenshot](\Media\SCC08.png)
+
 11. [] In the Name textbox, type ```Global Policy``` and for the Description type ```This is the default global policy for all users.``` and click the Next button.
 
 	^IMAGE[Open Screenshot](\Media\SCC09.png)
@@ -669,10 +672,10 @@ We can now go back and look at the dashboards and observe how they have changed.
     > [!NOTE] We can now see activity from various users and clients including the AIP Scanner and specific users. 
 	>
 	> !IMAGE[activity.png](\Media\activity.png)
-	>
+	
 1. [] Select the drop-down list under **Labels** and check the box next to **Highly Confidential \ All Employees**.
 
-> !IMAGE[activity2.png](\Media\activity2.png)
+	> !IMAGE[activity2.png](\Media\activity2.png)
 
 1. [] Click on one of the entries to bring up the **Activity Details** panel.
 
@@ -684,11 +687,11 @@ We can now go back and look at the dashboards and observe how they have changed.
 
 	> [!NOTE] In the Data discovery dashboard, you can see a breakdown of how files are being protected and locations that have sensitive content.
 	>
-	> !IMAGE[Discovery.png](\Media\Discovery.png)
+	> !IMAGE[Discovery.png](\Media\Discovery2.png)
 	> 
 	> If you click on one of the locations, you can drill down and see the content that has been protected on that specific device or repository.
 	>
-	> !IMAGE[discovery2.png](\Media\discovery2.png)
+	> !IMAGE[discovery2.png](\Media\discovery2b.png)
 	
 
 ===
