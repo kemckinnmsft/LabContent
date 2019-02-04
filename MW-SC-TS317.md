@@ -81,11 +81,8 @@ There are a few prerequisites that need to be set up to complete all the section
 
 In this task, we will create new Azure AD users and assign licenses via PowerShell.  In a procduction evironment this would be done using Azure AD Connect or a similar tool to maintain a single source of authority, but for lab purposes we are doing it via script to reduce setup time.
 
-1. [] Log into @lab.VirtualMachine(Scanner01).SelectLink using the password +++@lab.VirtualMachine(Client01).Password+++
-2. [] On the desktop, **right-click** on **AADConfig.ps1** and click **Run with PowerShell**.
-
-
-	> [!NOTE] If prompted to change the execution policy, type **y** and **Enter**.
+1. [] Log into @lab.VirtualMachine(Scanner01).SelectLink using the password +++Somepass1+++
+2. [] Open an **Administrative PowerShell Prompt** and run ```C:\Scripts\AADConfig.ps1```.
 
 1. [] When prompted for the **Tenant name**, **click in the text box** and enter ```@lab.CloudCredential(17).TenantName```.
 1. [] When prompted, provide the credentials below:
@@ -154,8 +151,6 @@ In this task, we will create new Azure AD users and assign licenses via PowerShe
     > $upn = "admin@"+$tenantfqdn
     > Set-MsolUser -UserPrincipalName $upn -UsageLocation US
     > Set-MsolUserLicense -UserPrincipalName $upn -AddLicenses $office, $ems
-
-	> [!NOTE] The PowerShell window will automatically close once users have been created and licenses have been assigned.
 
 ---
 
@@ -281,7 +276,7 @@ The AIP scanner operational UI helps you run your operations remotely using a fe
 
 In this task, we will configure the repository default and add a new profile with the repositories we want to scan.
 
-1. [] On @lab.VirtualMachine(Client01).SelectLink, in the Azure Information Protection blade, under **Scanner**, click **Nodes**.
+1. [] On @lab.VirtualMachine(Client01).SelectLink, in the Azure Information Protection blade, under **Scanner**, click **Profiles**.
 
 	> !IMAGE[ScannerProfiles](\Media\ScannerProfiles.png)
 
@@ -424,7 +419,9 @@ One of the most powerful features of Azure Information Protection is the ability
 
 However, helping your users to properly classify and protect sensitive data at the time of creation is a more organic user experience that will achieve better results long term.  In this task, we will define some basic recommended and automatic conditions that will trigger based on certain types of sensitive data.
 
-1. [] Under **Dashboards** on the left, click on **Data discovery (Preview)** to view the results of the discovery scan we performed previously.
+1. [] Switch to @lab.VirtualMachine(Client01).SelectLink and log in with the password +++@lab.VirtualMachine(Client01).Password+++.
+
+1. [] In the **AIP blade**, under **Dashboards** on the left, click on **Data discovery (Preview)** to view the results of the discovery scan we performed previously.
 
 	!IMAGE[Dashboard.png](\Media\Dashboard.png)
 
@@ -492,12 +489,13 @@ Although we will not be demonstrating these capabilities in this lab, you can us
 
 In this task, we will activate the labels from the Azure Portal for use in the Security and Compliance Center.
 
-1. [] On @lab.VirtualMachine(Client01).SelectLink, log in with the password +++@lab.VirtualMachine(Client01).Password+++.
-2. [] Navigate to ```https://portal.azure.com/?ActivateMigration=true#blade/Microsoft_Azure_InformationProtection/DataClassGroupEditBlade/migrationActivationBlade```
+1. [] On @lab.VirtualMachine(Client01).SelectLink, in the AIP blade, click on **Unified labeling (Preview)**.
+
+	> !IMAGE[Unified Labeling](\Media\Unified.png)
 
 3. [] Click **Activate** and **Yes**.
 
-	!IMAGE[o0ahpimw.jpg](\Media\o0ahpimw.jpg)
+	> !IMAGE[o0ahpimw.jpg](\Media\o0ahpimw.jpg)
 
 	>[!NOTE] You should see a message similar to the one below.
 	>
@@ -623,14 +621,22 @@ Now that we have Classified and Protected documents using the scanner, we can re
 
 	^IMAGE[Open Screenshot](\Media\hipavcx6.jpg)
 3. [] Open one of the Contoso Purchasing Permissions documents.
+1. [] When prompted, provide the credentials below:
+
+	> ```EvanG@@lab.CloudCredential(17).TenantName```
+	>
+	> ```pass@word1```
+
+1. [] Click **Yes** to allow the organization to manage the device.
 	
 	> [!NOTE] Observe that the document is classified as Highly Confidential \ All Employees. 
     >
     > !IMAGE[s1okfpwu.jpg](\Media\HCAE.jpg)
 
 4. [] Next, in the same documents folder, open one of the pdf files.
-5. [] When prompted by Adobe, enter ```AdamS@@lab.CloudCredential(17).TenantName``` and press OK.
-6. [] Check the box to save credentials and press OK.
+5. [] When prompted by Adobe, enter ```EvanG@@lab.CloudCredential(17).TenantName``` and press **Next**.
+6. [] Check the box to save credentials and press **Yes**.
+1. [] Click **Accept** in the **Permissions requested** dialog.
 
 	> [!NOTE] The PDF will now open and display the sensitivity across the top of the document.
 
@@ -662,9 +668,15 @@ We can now go back and look at the dashboards and observe how they have changed.
 	>
 	> !IMAGE[activity.png](\Media\activity.png)
 	>
-	> You can also very quickly filter to just the **Highly Confidential** documents and identify the repositories and devices that contain this sensitive information.
+1. [] Select the drop-down list under **Labels** and check the box next to **Highly Confidential \ All Employees**.
+
+> !IMAGE[activity2.png](\Media\activity2.png)
+
+1. [] Click on one of the entries to bring up the **Activity Details** panel.
+
+	> [!NOTE] In the Activity Details panel, you can see all of the details related to the classification, labeling, and protection of the file. The level of detail shown below is only available if you checked the box to Enable document content matches under Configure analytics (Preview). 
 	>
-	> !IMAGE[activity2.png](\Media\activity2.png)
+	> !IMAGE[activity2.png](\Media\activity3.png)	
 
 3. [] Finally, click on **Data discovery (Preview)**.
 
