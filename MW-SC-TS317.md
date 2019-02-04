@@ -46,7 +46,7 @@ Azure Information Protection (AIP) is a cloud-based solution that can help organ
 
 The phases of AIP are shown in the graphic below.  
 
-> !IMAGE[Phases.png](\Media\Phases.png)
+!IMAGE[Phases.png](\Media\Phases.png)
 
 In this lab, we will guide you through addressing all of these phases using some of the newest features of AIP.  We first will perform Discovery using the AIP scanner. We recommend that all customers do this step as it only requires AIP P1 licensing and can help to show customers the risk they are currently facing so they can properly prioritize their security investments. 
 
@@ -169,7 +169,7 @@ For several of the exercises in this lab series, you will require an active subs
 
 4. [] Click the **Start** button to get started.
 
-	!IMAGE[wdir7lb3.jpg](\Media\wdir7lb3.jpg)
+	> !IMAGE[wdir7lb3.jpg](\Media\wdir7lb3.jpg)
 1. [] Log in using the credentials below.
 
 	```@lab.CloudCredential(17).Username```
@@ -178,10 +178,10 @@ For several of the exercises in this lab series, you will require an active subs
 
 1. [] Click **Confirm** if the correct email address is listed.
 
-	!IMAGE[teyx280d.jpg](\Media\teyx280d.jpg)
+	> !IMAGE[teyx280d.jpg](\Media\teyx280d.jpg)
 7. [] Click in the Promo code box and type ```@lab.CloudCredential(215).PromoCode```, then click the **Claim Promo Code** button.
 
-	!IMAGE[e1l35ko2.jpg](\Media\e1l35ko2.jpg)
+	> !IMAGE[e1l35ko2.jpg](\Media\e1l35ko2.jpg)
 
 	>[!NOTE] It may take up to 5 minutes to process the redemption.
 
@@ -193,7 +193,7 @@ For several of the exercises in this lab series, you will require an active subs
 
 9. [] Check the box to agree to the terms and click **Sign up**.
 
-	!IMAGE[k2a97g8e.jpg](\Media\k2a97g8e.jpg)
+	> !IMAGE[k2a97g8e.jpg](\Media\k2a97g8e.jpg)
 
 	> [!NOTE] It may take a few minutes to process the request.
 
@@ -204,7 +204,7 @@ In order to collect log data from Azure Information Protection clients and servi
 
 1. [] In the Azure portal, type the word ```info``` into the **search bar** and press **Enter**, then click on **Azure Information Protection**. 
 
-	!IMAGE[2598c48n.jpg](\Media\2598c48n.jpg)
+	> !IMAGE[2598c48n.jpg](\Media\2598c48n.jpg)
 	
 	> [!HINT] If you do not see the search bar at the top of the portal, click on the **Magnifying Glass** icon to expand it.
 	>
@@ -220,7 +220,7 @@ In order to collect log data from Azure Information Protection clients and servi
 
 1. [] Next, click on **+ Create new workspace**.
 
-	!IMAGE[qu68gqfd.jpg](\Media\qu68gqfd.jpg)
+	> !IMAGE[qu68gqfd.jpg](\Media\qu68gqfd.jpg)
 1. [] In the Log analytics workspace using the values in the table below and click **OK**.
 
 	|||
@@ -234,13 +234,13 @@ In order to collect log data from Azure Information Protection clients and servi
 	^IMAGE[Open Screenshot](\Media\5butui15.jpg)
 1. [] Next, back in the Configure analytics (preview) blade, **check the boxes** next to the **workspace** and next to **Enable Content Matches** and click **OK**.
 
-	!IMAGE[1547437013585](\Media\1547437013585.png)
+	> !IMAGE[1547437013585](\Media\1547437013585.png)
 
 	> [!KNOWLEDGE] Checking the box next to **Enable Content Matches** allows the **actual matched content** to be stored in the Azure Log Analytics workspace.  This could include many types of sensitive information such as SSN, Credit Card Numbers, and Banking Information.  This is important to understand and is why access to this ALA workspace should be locked down appropriately.
 
 1. [] Click **Yes**, in the confirmation dialog.
 
-	!IMAGE[zgvmm4el.jpg](\Media\zgvmm4el.jpg)
+	> !IMAGE[zgvmm4el.jpg](\Media\zgvmm4el.jpg)
 
 ---
 
@@ -250,7 +250,7 @@ In order to collect log data from Azure Information Protection clients and servi
 
 Even before configuring an AIP classification taxonomy, customers can scan and identify files containing sensitive information based on the built-in sensitive information types included in the Microsoft Classification Engine.  
 
-!IMAGE[ahwj80dw.jpg](\Media\ahwj80dw.jpg)
+> !IMAGE[ahwj80dw.jpg](\Media\ahwj80dw.jpg)
 
 Often, this can help drive an appropriate level of urgency and attention to the risk customers face if they delay rolling out AIP classification and protection.  
 
@@ -425,7 +425,7 @@ However, helping your users to properly classify and protect sensitive data at t
 
 1. [] In the **AIP blade**, under **Dashboards** on the left, click on **Data discovery (Preview)** to view the results of the discovery scan we performed previously.
 
-	!IMAGE[Dashboard.png](\Media\Dashboard.png)
+	> !IMAGE[Dashboard.png](\Media\Dashboard.png)
 
 	> [!KNOWLEDGE] Notice that there are no labeled or protected files shown at this time.  This uses the AIP P1 discovery functionality available with the AIP Scanner. Only the predefined Office 365 Sensitive Information Types are available with AIP P1 as Custom Sensitive Information Types require automatic conditions to be defined, which is an AIP P2 feature.
 
@@ -436,10 +436,10 @@ However, helping your users to properly classify and protect sensitive data at t
 	^IMAGE[Open Screenshot](\Media\jyw5vrit.jpg)
 1. [] In the Label: All Employees blade, scroll down to the **Configure conditions for automatically applying this label** section, and click on **+ Add a new condition**.
 
-	!IMAGE[cws1ptfd.jpg](\Media\cws1ptfd.jpg)
+	> !IMAGE[cws1ptfd.jpg](\Media\cws1ptfd.jpg)
 1. [] In the Condition blade, in the **Select information types** search box, type ```EU``` and check the boxes next to the **items shown below**.
 
-	!IMAGE[xaj5hupc.jpg](\Media\xaj5hupc.jpg)
+	> !IMAGE[xaj5hupc.jpg](\Media\xaj5hupc.jpg)
 
 1. [] Click **Save** in the Condition blade and **OK** to the Save settings prompt.
 
@@ -466,7 +466,7 @@ However, helping your users to properly classify and protect sensitive data at t
 	^IMAGE[Open Screenshot](\Media\ie6g5kta.jpg)
 1. [] In the Labels: All Employees blade, in the **Configure conditions for automatically applying this label** section, click **Automatic**.
 
-   !IMAGE[245lpjvk.jpg](\Media\245lpjvk.jpg)
+   > !IMAGE[245lpjvk.jpg](\Media\245lpjvk.jpg)
 
 	> [!HINT] The policy tip is automatically updated when you switch the condition to Automatic.
 
@@ -538,13 +538,13 @@ The previous step enabled the AIP labels for use in the Security and Compliance 
 9. [] On the Policy settings page, select the General label from the drop-down next to Apply this label by default to documents and email.
 10. [] Check the box next to Users must provide justification to remove a label or lower classification label and click the Next button.
 
-	!IMAGE[Open Screenshot](\Media\SCC08.png)
+	> !IMAGE[Open Screenshot](\Media\SCC08.png)
 11. [] In the Name textbox, type ```Global Policy``` and for the Description type ```This is the default global policy for all users.``` and click the Next button.
 
 	^IMAGE[Open Screenshot](\Media\SCC09.png)
 12. [] Finally, on the Review your settings page, click the Publish button.
 
-	!IMAGE[Open Screenshot](\Media\SCC10.png)
+	> !IMAGE[Open Screenshot](\Media\SCC10.png)
 
 ---
 
