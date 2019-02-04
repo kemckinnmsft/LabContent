@@ -673,7 +673,7 @@ We can now go back and look at the dashboards and observe how they have changed.
 	>
 	> !IMAGE[activity.png](\Media\activity.png)
 	
-1. [] Select the drop-down list under **Labels** and check the box next to **Highly Confidential \ All Employees**.
+1. [] Select the drop-down list under **Labels** and check the box next to **Highly Confidential \ All Employees**. 
 
 	> !IMAGE[activity2.png](\Media\activity2.png)
 
