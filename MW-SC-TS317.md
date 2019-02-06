@@ -399,7 +399,7 @@ The first step in configuring the AIP Scanner is to install the service and conn
 
 1. [] When prompted, enter the AIP Scanner cloud credentials below:
 
-	> ```AIPScanner@@lab.CloudCredential(139).Tenant```
+	> ```AIPScanner@@lab.CloudCredential(139).TenantName```
 	>
 	> ```Somepass1```
 
