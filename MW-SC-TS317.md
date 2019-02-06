@@ -130,15 +130,7 @@ In this task, we will create new Azure AD users and assign licenses via PowerShe
     > New-AzureADUser -AccountEnabled $True -DisplayName $user.displayname -PasswordProfile $PasswordProfile -MailNickName $user.username -UserPrincipalName $upn
     > }
     > 
-    > #### MCAS user and group creation
-	> $upn = "mcasAdminUS@"+$tenantfqdn
-	> New-AzureADUser -AccountEnabled $True -DisplayName "MCAS US admin" -PasswordProfile $PasswordProfile -MailNickName "mcasadminUS" -UserPrincipalName $upn
-    > New-AzureADGroup -DisplayName "US employees" -MailNickName "USemployees" -SecurityEnabled $true -MailEnabled $false
-    > $groupId = Get-AzureADGroup -SearchString "usemployees"
-    > $userId = Get-AzureADUser -SearchString "mcasadminus"
-    > Add-AzureADGroupMember -RefObjectId $userId.ObjectId -ObjectId $groupId.ObjectId
-	> 
-	> Start-Sleep -s 10
+    > Start-Sleep -s 10
 	> foreach ($user in $users){
 	> 
     > #### Store UPN created from csv and tenant
