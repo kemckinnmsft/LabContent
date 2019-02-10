@@ -738,6 +738,5 @@ We hope you enjoyed this lab! Please fill out the survey and let us know what wa
 
 > ![cat](/Media/ninjacat.png)
 
-!INSTRUCTIONS[https://blogs.msdn.microsoft.com/oldnewthing/20160804-00/?p=94025][ninja-cat]
-https://blogs.msdn.microsoft.com/oldnewthing/20160804-00/?p=94025
+[https://blogs.msdn.microsoft.com/oldnewthing/20160804-00/?p=94025](https://blogs.msdn.microsoft.com/oldnewthing/20160804-00/?p=94025)
 
