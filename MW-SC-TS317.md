@@ -698,7 +698,7 @@ We can now go back and look at the dashboards and observe how they have changed.
 
 	> [!ALERT] Some of the content shown in this dashboard will not be present because we did not perform manual labeling.  This content has been left in to show the capabilities of the reports.
 
-1. [] Under **Dashboards**, click on **Usage report (Preview)**.
+1. [] Under **Analytics**, click on **Usage report (Preview)**.
 
 	> [!NOTE] Observe that there are now entries from the AIP scanner, File Explorer, Microsoft Outlook, and Microsoft Word based on our activities in this lab. 
 	>
@@ -711,7 +711,7 @@ We can now go back and look at the dashboards and observe how they have changed.
 	>
 	> !IMAGE[9y52ab7u.jpg](\Media\9y52ab7u.jpg)
 
-2. [] Next, under dashboards, click on **Activity logs (preview)**.
+2. [] Next, under Analytics, click on **Activity logs (preview)**.
    
     > [!NOTE] We can now see activity from various users and clients including the AIP Scanner and specific users. 
 	>
