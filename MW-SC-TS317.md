@@ -223,7 +223,7 @@ In order to collect log data from Azure Information Protection clients and servi
 	|-----|-----|
 	|OMS Workspace|**Type a unique Workspace Name**|
 	|Resource Group|```AIP-RG```|
-	|Location|**East US** (Or a location near the event)|
+	|Location|**West US 2** (Or a location near the event)|
 
 	> [!HINT] The OMS **Workspace name** must be **unique across all of Azure**. The name is not relevant for this lab, so feel free to use random characters.
 
@@ -275,7 +275,7 @@ The AIP scanner operational UI helps you run your operations remotely using a fe
 
 In this task, we will configure the repository default and add a new profile with the repositories we want to scan.
 
-1. [] On @lab.VirtualMachine(Client01).SelectLink, in the Azure Information Protection blade, under **Scanner**, click **Profiles**.
+1. [] On @lab.VirtualMachine(Client01).SelectLink, in the Azure Information Protection blade, under **Scanner**, click **Profiles (Preview)**.
 
 	> !IMAGE[ScannerProfiles](\Media\ScannerProfiles.png)
 
@@ -295,7 +295,7 @@ In this task, we will configure the repository default and add a new profile wit
 
 1. [] Note the various additional settings, but **do not modify them**. Click **Save** to complete initial configuration.
 
-	> [!KNOWLEDGE] For additional information on the options available for the AIP scanner profile, 
+	> [!KNOWLEDGE] For additional information on the options available for the AIP scanner profile, see the documentation at [https://aka.ms/ProfileConfiguration](https://aka.ms/ProfileConfiguration)
 
 1. [] Once the save is complete, click on **Configure repositories**.
 
@@ -316,6 +316,27 @@ In this task, we will configure the repository default and add a new profile wit
 
 	> !IMAGE[Repo](\Media\Repo.png)
 
+	> [!KNOWLEDGE] These Policy enforcement settings will set a custom default label of **Confidential \ All Employees** for all files that do not match a policy in this repository.  It will also set the default owner for all files protected by the Scanner to ```@lab.CloudCredential(139).UserName```.
+
+1. [] Click **Save**.
+
+1. [] In the Repositories blade, click the **+ Add** button.
+
+1. [] In the Repository blade, under **Path**, type ```C:\PII```.
+
+1. [] Under Policy enforcement, make the modifications shown in the table below.
+
+	|Policy|Value|
+	|-----|-----|
+	|**Label files based on content**|**Off**|
+	|**Default label**|**Custom**|
+	||**Highly Confidential \ All Employees**|
+	|**Relabel files**|**On**|
+
+	> !IMAGE[Repo2](\Media\Repo2.png)
+
+	> [!KNOWLEDGE] These Policy enforcement settings will cause all files in the repository to have the same label (**Highly Confidential \ All Employees**).  Additionally, if a file with a different label is added to this repository, the scanner will relabel the label to **Highly Confidential \ All Employees**.
+
 1. [] Click **Save**.
 
 1. [] In the Repositories blade, click the **+ Add** button.
@@ -323,6 +344,8 @@ In this task, we will configure the repository default and add a new profile wit
 1. [] In the Repository blade, under **Path**, type ```http://Scanner01/documents```.
 
 1. [] Leave all policies at Profile default, and click **Save**.
+
+> [!NOTE] We have now configured all three supported AIP Scanner repository types (**CIFS File Share**, **Local Directory**, and on-premises **SharePoint Document Library**).
 
 ---
 ## AIP Scanner Setup
