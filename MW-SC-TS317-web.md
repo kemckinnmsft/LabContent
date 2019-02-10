@@ -433,7 +433,7 @@ The first step in configuring the AIP Scanner is to install the service and conn
 
 	> :memo: An AIP scanner Discovery scan will start directly after aquiring the application access token.
 
-	> :warn: If you see a **.NET exception**, press **OK**. This is due to SharePoint startup in the VM environment. This event **must be acknowledged** to complete the discovery scan.
+	> ing If you see a **.NET exception**, press **OK**. This is due to SharePoint startup in the VM environment. This event **must be acknowledged** to complete the discovery scan.
 
 ---
 
@@ -452,7 +452,7 @@ However, helping your users to properly classify and protect sensitive data at t
 
 	> :memo: Notice that there are no labeled or protected files shown at this time.  This uses the AIP P1 discovery functionality available with the AIP Scanner. Only the predefined Office 365 Sensitive Information Types are available with AIP P1 as Custom Sensitive Information Types require automatic conditions to be defined, which is an AIP P2 feature.
 
-	> :warn: If no data is shown, it may still be processing. Continue with the lab and come back to see the results later.
+	> ing If no data is shown, it may still be processing. Continue with the lab and come back to see the results later.
 
 1. Under **Classifications** on the left, click **Labels** then expand **Confidential**, and click on **All Employees**.
 
@@ -685,7 +685,7 @@ We can now go back and look at the dashboards and observe how they have changed.
 
 1. On Client01, open the browser that is logged into the Azure Portal.
 
-	> :warn: Some of the content shown in this dashboard will not be present because we did not perform manual labeling.  This content has been left in to show the capabilities of the reports.
+	> :warning: Some of the content shown in this dashboard will not be present because we did not perform manual labeling.  This content has been left in to show the capabilities of the reports.
 
 1. Under **Dashboards**, click on **Usage report (Preview)**.
 
