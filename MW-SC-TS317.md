@@ -32,7 +32,7 @@ This lab is designed to be completed on Windows 10 VM with the following charact
 - Office 365 ProPlus
 - Azure Information Protection Client (1.45.32.0)
 
-Microsoft 365 E5 Tenant credentials will be provided during the event.  If you want to run through this lab after the event, you may use a tenant created through https://demos.microsoft.com or your own Microsoft 365 Tenant. This Lab Guide will be publicly available after the event at https://aka.ms/AIPHOL2.
+Microsoft 365 E5 Tenant credentials will be provided during the event.  If you want to run through this lab after the event, you may use a tenant created through https://demos.microsoft.com or your own Microsoft 365 Tenant. This Lab Guide will be publicly available after the event at https://aka.ms/AIPHOL2
 
 ---
 
@@ -92,7 +92,9 @@ In this task, we will create new Azure AD users and assign licenses via PowerShe
 	```@lab.CloudCredential(139).Username```
 
 	```@lab.CloudCredential(139).Password``` 
-   
+
+	> [!WARNING] If you see any errors, please rerun the script to ensure that licensing is assigned.
+
 	> [!KNOWLEDGE] We are running the PowerShell code below to create the accounts and groups in AAD and assign licenses for EMS E5 and Office E5. This script is also available at [https://aka.ms/labscripts](https://aka.ms/labscripts) as AADConfig.ps1.
     > 
     > #### Azure AD User and Group Configuration
@@ -423,7 +425,7 @@ However, helping your users to properly classify and protect sensitive data at t
 
 1. [] Switch to @lab.VirtualMachine(Client01).SelectLink and log in with the password +++@lab.VirtualMachine(Client01).Password+++.
 
-1. [] In the **AIP blade**, under **Dashboards** on the left, click on **Data discovery (Preview)** to view the results of the discovery scan we performed previously.
+1. [] In the **AIP blade**, under **Analytics** on the left, click on **Data discovery (Preview)** to view the results of the discovery scan we performed previously.
 
 	> !IMAGE[Dashboard.png](\Media\Dashboard.png)
 
@@ -524,30 +526,30 @@ The previous step enabled the AIP labels for use in the Security and Compliance 
 3. [] On the Choose labels to publish page, click the **Choose labels to publish** link.
 
 	^IMAGE[Open Screenshot](\Media\SCC02.png)
-4. [] In the Choose labels pane, click the + Add button.
+4. [] In the Choose labels pane, click the **+ Add** button.
 
 	^IMAGE[Open Screenshot](\Media\SCC03.png)
-5. [] Click the box next to Display name to select all labels, then click the Add button.
+5. [] Click the box next to **Display name** to **select all labels**, then click the **Add** button.
 
 	^IMAGE[Open Screenshot](\Media\SCC04.png)
-6. [] Click the Done button.
+6. [] Click the **Done** button.
 
 	^IMAGE[Open Screenshot](\Media\SCC05.png)
-7. [] Back on the Choose labels to publish page, click the Next button.
+7. [] Back on the Choose labels to publish page, click the **Next** button.
 
 	^IMAGE[Open Screenshot](\Media\SCC06.png)
-8. [] On the Publish to users and groups page, notice that All users are included by default. If you were creating a scoped policy, you would choose specific users or groups to publish to. Click Next.
+8. [] On the Publish to users and groups page, notice that **All users** are included by default. If you were creating a scoped policy, you would choose specific users or groups to publish to. Click **Next**.
 
 	^IMAGE[Open Screenshot](\Media\SCC07.png)
-9. [] On the Policy settings page, select the General label from the drop-down next to Apply this label by default to documents and email.
-10. [] Check the box next to Users must provide justification to remove a label or lower classification label and click the Next button.
+9. [] On the Policy settings page, select the **General** label from the drop-down next to **Apply this label by default to documents and email**.
+10. [] Check the box next to **Users must provide justification to remove a label or lower classification label** and click the **Next** button.
 
 	> !IMAGE[Open Screenshot](\Media\SCC08.png)
 
-11. [] In the Name textbox, type ```Global Policy``` and for the Description type ```This is the default global policy for all users.``` and click the Next button.
+11. [] In the Name textbox, type ```Global Policy``` and for the Description type ```This is the default global policy for all users.``` and click the **Next** button.
 
 	^IMAGE[Open Screenshot](\Media\SCC09.png)
-12. [] Finally, on the Review your settings page, click the Publish button.
+12. [] Finally, on the Review your settings page, click the **Publish** button.
 
 	> !IMAGE[Open Screenshot](\Media\SCC10.png)
 
@@ -572,7 +574,7 @@ In this exercise, we will run the AIP Scanner in enforce mode to classify and pr
 
 In this task, we will modify the AIP scanner Profile to enforce the conditions we set up and have it run on all files using the Start-AIPScan command.
 
-1. [] On @lab.VirtualMachine(Client01).SelectLink, return to **Scanner > Profiles** in the Azure Portal.
+1. [] On @lab.VirtualMachine(Client01).SelectLink, return to **Scanner > Profiles (Preview)** in the Azure Portal.
 
 	> [!NOTE] If needed, navigate to ```https://aka.ms/ScannerProfiles``` and log in with the credentials below:
 	>
@@ -628,7 +630,7 @@ Now that we have Classified and Protected documents using the scanner, we can re
 	>```Pa$$w0rd```
 
 	^IMAGE[Open Screenshot](\Media\hipavcx6.jpg)
-3. [] Open one of the Contoso Purchasing Permissions documents.
+3. [] Open one of the **Contoso Purchasing Permissions** documents.
 1. [] When prompted, provide the credentials below:
 
 	> ```EvanG@@lab.CloudCredential(139).TenantName```
@@ -641,12 +643,12 @@ Now that we have Classified and Protected documents using the scanner, we can re
     >
     > !IMAGE[s1okfpwu.jpg](\Media\HCAE.jpg)
 
-4. [] Next, in the same documents folder, open one of the pdf files.
+4. [] Next, in the same documents folder, open one of the **pdf files**.
 5. [] When prompted by Adobe, enter ```EvanG@@lab.CloudCredential(139).TenantName``` and press **Next**.
 6. [] Check the box to save credentials and press **Yes**.
 1. [] Click **Accept** in the **Permissions requested** dialog.
 
-	> [!NOTE] The PDF will now open and display the sensitivity across the top of the document.
+	> [!NOTE] The PDF will now open and **display the sensitivity** across the top of the document.
 
 	> [!Knowledge] The latest version of Acrobat Reader DC and the MIP Plugin have been installed on this system prior to the lab. Additionally, the sensitivity does not display by default in Adobe Acrobat Reader DC.  You must make the modifications below to the registry to make this bar display.
 	>
