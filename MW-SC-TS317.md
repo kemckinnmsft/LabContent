@@ -342,6 +342,14 @@ The first step in configuring the AIP Scanner is to install the service and conn
 
 1. [] Open an **Administrative PowerShell Window** and type ```C:\Scripts\Install-ScannerPreview.ps1``` and press **Enter**. 
 
+1. [] When prompted, enter the Global Admin credentials below:
+
+	> ```@lab.CloudCredential(139).Username```
+	>
+	> ```@lab.CloudCredential(139).Password```
+
+1. [] In the popup box, click **OK** to accept the default Profile value **East US**.
+
 	> [!NOTE] This script installs the AIP scanner Service using the **local domain user** account (Contoso\\AIPScanner) provisioned for the AIP Scanner. SQL Server is installed locally and the default instance will be used. The script will prompt for **Tenant Global Admin** credentials, the **AIP scanner Profile name**, and finally the AIP Scanner cloud account.  In a production environment, this will likely be the synced on-prem account, but for this demo we created a cloud only account during AAD Configuration earlier in the lab.
 	>
 	> This script only works if logged on locally to the server as the AIP scanner Service Account, and the service account is a local administrator.  Please see the scripts at https://aka.ms/ScannerBlog for aadditional instructions.
@@ -391,14 +399,6 @@ The first step in configuring the AIP Scanner is to install the service and conn
 	> Restart-Service AIPScanner
 	> Start-AIPScan
 
-1. [] When prompted, enter the Global Admin credentials below:
-
-	> ```@lab.CloudCredential(139).Username```
-	>
-	> ```@lab.CloudCredential(139).Password```
-
-1. [] In the popup box, click **OK** to accept the default Profile value **East US**.
-
 1. [] When prompted, enter the AIP Scanner cloud credentials below:
 
 	> ```AIPScanner@@lab.CloudCredential(139).TenantName```
@@ -408,6 +408,13 @@ The first step in configuring the AIP Scanner is to install the service and conn
 1. [] In the Permissions requested window, click **Accept**.
 
     > !IMAGE[nucv27wb.jpg](\Media\nucv27wb.jpg)
+
+	> [!NOTE] If you get any errors, copy the command from C:\scripts\Set-AIPAuthentication.txt and run it in the Admin PowerShell prompt.
+	> Next run the commands below to start the discovery scan
+	>
+	> ```Restart-Service AIPScanner```
+	>
+	> ```Start-AIPScan```
 
 	> [!NOTE] An AIP scanner Discovery scan will start directly after aquiring the application access token.
 
