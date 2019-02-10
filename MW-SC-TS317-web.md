@@ -58,7 +58,7 @@ This lab was developed for use in a structured VM environment with the following
 		nuckc,Nuck Chorris,NinjaCat123
 
 
-- 3 Windows 10 Enterprise Clients (CLIENT01-03)
+- 1 Windows 10 Enterprise Clients (CLIENT01)
 	- Office 365 ProPlus
 	- Azure Information Protection client (1.41.51.0) (Available at https://aka.ms/AIPClient)
 
