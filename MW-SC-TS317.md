@@ -679,6 +679,8 @@ Now that we have Classified and Protected documents using the scanner, we can re
 1. [] Click **Accept** in the **Permissions requested** dialog.
 
 	> [!NOTE] The PDF will now open and **display the sensitivity** across the top of the document.
+	>
+	> !IMAGE[PDF](\Media\PDF.png)
 
 	> [!Knowledge] The latest version of Acrobat Reader DC and the MIP Plugin have been installed on this system prior to the lab. Additionally, the sensitivity does not display by default in Adobe Acrobat Reader DC.  You must make the modifications below to the registry to make this bar display.
 	>
