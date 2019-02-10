@@ -223,7 +223,7 @@ In order to collect log data from Azure Information Protection clients and servi
 	|-----|-----|
 	|OMS Workspace|**Type a unique Workspace Name**|
 	|Resource Group|```AIP-RG```|
-	|Location|**West US 2** (Or a location near the event)|
+	|Location|**East US**|
 
 	> [!HINT] The OMS **Workspace name** must be **unique across all of Azure**. The name is not relevant for this lab, so feel free to use random characters.
 
@@ -701,6 +701,13 @@ We can now go back and look at the dashboards and observe how they have changed.
 	> [!NOTE] Observe that there are now entries from the AIP scanner, File Explorer, Microsoft Outlook, and Microsoft Word based on our activities in this lab. 
 	>
 	> !IMAGE[Usage.png](\Media\newusage.png)
+
+	> [!KNOWLEDGE] If there is no data in the dashboard, open a **File Explorer** window, and browse to ```\\Scanner01.contoso.azure\c$\users\aipscanner\AppData\Local\Microsoft\MSIP\Scanner\Reports```.
+	> Review the summary txt and detailed csv files available there. You may need to open the largest zipped files to find the scan that actually labeled the content.
+	>
+	> The details contained in the DetailedReport.csv shows the types of sensitive data found by the scanner. This data will be shown in AIP analytics after some processing time.
+	>
+	> !IMAGE[9y52ab7u.jpg](\Media\9y52ab7u.jpg)
 
 2. [] Next, under dashboards, click on **Activity logs (preview)**.
    

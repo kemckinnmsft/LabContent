@@ -26,13 +26,67 @@ Before working on this lab, you must have:
 
 ### Lab machine technology
 
-This lab is designed to be completed on Windows 10 VM with the following characteristics:
+This lab was developed for use in a structured VM environment with the following characteristics:
 
-- Windows 10 Enterprise / Windows Server 2016
-- Office 365 ProPlus
-- Azure Information Protection Client (1.45.32.0)
+- Windows Server 2016 Domain Controller (ContosoDC) (Deployed with contoso.azure root domain)
+	- Provisioned On-Premises domain admin account named **Contoso\LabUser** with the password **Pa$$w0rd**
+	- Provisioned On-Premises users per the table below
+  
+	> |User Name|Name|Password|
+	> |-----|-----|-----|
+	> |AdamS|Adam Smith|pass@word1|
+	> |AIPScanner||Somepass1|
+	> |AliceA|Alice Anderson|pass@word1|
+	> |EvanG|Evan Green|pass@word1|
+    > |NuckC|Nuck Chorris|NinjaCat123|
 
-Microsoft 365 E5 Tenant credentials will be provided during the event.  If you want to run through this lab after the event, you may use a tenant created through https://demos.microsoft.com or your own Microsoft 365 Tenant. This Lab Guide will be publicly available after the event at https://aka.ms/AIPHOL2.
+- Member Server (Scanner01) with the software below pre-installed
+	- Azure AD Connect (Installed, not configured. Available at https://aka.ms/AADConnect)
+	- Azure Information Protection client (1.41.51.0) (Available at https://aka.ms/AIPClient)
+	- SQL Server 2016+ (Any version will work for AIP Scanner, but full SQL Enterprise was used for this lab setup due to coexistence of SharePoint Server.  If using SQL Express, make sure to use Scanner01\SQLExpress as the SQL Server name in the Scanner Install PowerShell Script)
+	- SharePoint Server 2016 Single Server install
+	- Demo PII content deployed to a document library at http://Scanner01/documents and in a fileshare shared as \\Scanner01\documents
+	- Test PII content available at https://github.com/kemckinnmsft/AIPLAB/blob/master/Content/PII.zip
+	- A users.csv file located at c:\ containing the text below. Remove any spaces between or after lines.
+
+
+		username,displayname,password
+		AdamS,Adam Smith,pass@word1
+		AIPScanner,AIPScanner,Somepass1
+		alicea,Alice Anderson,pass@word1
+		evang,Evan Green,pass@word1
+		nuckc,Nuck Chorris,NinjaCat123
+
+
+- 3 Windows 10 Enterprise Clients (CLIENT01-03)
+	- Office 365 ProPlus
+	- Azure Information Protection client (1.41.51.0) (Available at https://aka.ms/AIPClient)
+
+Microsoft 365 E5 Tenant credentials will be necessary to run through all of the exercises included in this lab.  If you have access to https://demos.microsoft.com, you may use a tenant provisioned there, or your own trial/POC Microsoft 365 Tenant. Global Admin credentials are required to complete most of these exercises.
+
+In the Demos.Microsoft.com Tenants, AIP is pre-populated with labels matching the structure below.  If you are using your own tenant, you may need to create some of these labels to follow along with all of the steps.
+
+> |Label Name|Description|Sub-Label|Protected|User Rights|
+> |-----|-----|-----|-----|-----|
+> |Personal|Non-business data, for personal use only.|No|No|N/A|
+> |Public|Business data that is specifically prepared and approved for public consumption.|No|No|N/A|
+> |General|Business data that is not intended for public consumption. However, this can be shared with external partners, as required. Examples include a company internal telephone directory, organizational charts, internal standards, and most internal communication.|No|No|N/A|
+> |Confidential|Sensitive business data that could cause damage to the business if shared with unauthorized people. Examples include contracts, security reports, forecast summaries, and sales account data.|No|No|N/A|
+> |Recipients Only|Confidential data that requires protection and that can be viewed by the recipients only.|Yes, of Confidential|Yes|User defined, In Outlook apply Do Not Forward|
+> |All Employees|Confidential data that requires protection, which allows all employees full permissions. Data owners can track and revoke content.|Yes, of Confidential|Yes|All members, Co-Owner|
+> |Anyone (not protected)|Data that does not require protection. Use this option with care and with appropriate business justification.|Yes, of Confidential|No|N/A|
+> |Highly Confidential|Very sensitive business data that would cause damage to the business if it was shared with unauthorized people. Examples include employee and customer information, passwords, source code, and pre-announced financial reports.|No|No|N/A|
+> |Recipients Only|Highly Confidential data that requires protection and that can be viewed by the recipients only.|Yes, of Highly Confidential|Yes|User defined, In Outlook apply Do Not Forward|
+> |All Employees|Highly Confidential data that requires protection, which allows all employees full permissions. Data owners can track and revoke content.|Yes, of Highly Confidential|Yes|All members, Co-Author|
+> |Anyone (not protected)|Data that does not require protection. Use this option with care and with appropriate business justification.|Yes, of Highly Confidential|No|N/A|
+
+### Reporting Errors
+
+This is a living document and was developed from lab content so it is possible that some of the screenshots or references are not perfectly translated.  **Additionally, the steps in this lab are designed around specific lab tenants so may not be applicable or may need to be altered in other test environments.  Please modify as necessary for your environment**.  
+
+If you run into any issues in this document or the instructions do not work because of changes in the Azure interface or client software, please reach out to me by clicking on the link below. I will make every effort to ensure that the instructions contained in this document are up-to-date and relevant but constructive criticism is always appreciated.
+
+https://aka.ms/AIPLabFeedback
 
 ---
 
@@ -47,7 +101,7 @@ Azure Information Protection (AIP) is a cloud-based solution that can help organ
 
 The phases of AIP are shown in the graphic below.  
 
-!IMAGE[Phases.png](\Media\Phases.png)
+![Phases.png](/Media/Phases.png)
 
 In this lab, we will guide you through addressing all of these phases using some of the newest features of AIP.  We first will perform Discovery using the AIP scanner. We recommend that all customers do this step as it only requires AIP P1 licensing and can help to show customers the risk they are currently facing so they can properly prioritize their security investments. 
 
@@ -57,7 +111,7 @@ We will help you understand how to Enable and Publish labels in the Security and
 
 Finally, we will demonstrate how to use the new AIP Dashboards to leverage Azure Log Analytics to display actionable information on Usage, Activity, and Data Risk.
 
-!IMAGE[Two overlaying screenshots of the Azure Information Protection scanner's blade in the Azure portal. This blade provides dashboards that consolidate information for all deployed Azure Information Protection scanners, including health status, scan results, classification and policy settings, and more.](\Media\8324-image001.png)
+![Two overlaying screenshots of the Azure Information Protection scanner's blade in the Azure portal. This blade provides dashboards that consolidate information for all deployed Azure Information Protection scanners, including health status, scan results, classification and policy settings, and more.](/Media/8324-image001.png)
 
 ## Objectives
 
@@ -83,20 +137,20 @@ There are a few prerequisites that need to be set up to complete all the section
 
 In this task, we will create new Azure AD users and assign licenses via PowerShell.  In a procduction evironment this would be done using Azure AD Connect or a similar tool to maintain a single source of authority, but for lab purposes we are doing it via script to reduce setup time.
 
-1. [] Log into @lab.VirtualMachine(Scanner01).SelectLink using the password +++Somepass1+++
+1. [] Log into Scanner01 using the password ```Somepass1```
 2. [] Open an **Administrative PowerShell Prompt** and run ```C:\Scripts\AADConfig.ps1```.
 
-1. [] When prompted for the **Tenant name**, **click in the text box** and enter ```@lab.CloudCredential(139).TenantName```.
+1. [] When prompted for the **Tenant name**, **click in the text box** and enter ```Your Tenant Name```.
 1. [] When prompted, provide the credentials below:
 
-	```@lab.CloudCredential(139).Username```
+	```Global Admin Username```
 
-	```@lab.CloudCredential(139).Password``` 
+	```Global Admin Password``` 
    
-	> [!KNOWLEDGE] We are running the PowerShell code below to create the accounts and groups in AAD and assign licenses for EMS E5 and Office E5. This script is also available at [https://aka.ms/labscripts](https://aka.ms/labscripts) as AADConfig.ps1.
+	> :memo: We are running the PowerShell code below to create the accounts and groups in AAD and assign licenses for EMS E5 and Office E5. This script is also available at [https://aka.ms/labscripts](https://aka.ms/labscripts) as AADConfig.ps1.
     > 
     > #### Azure AD User and Group Configuration
-    > $tenantfqdn = "@lab.CloudCredential(139).TenantName"
+    > $tenantfqdn = "Your Tenant Name"
     > $tenant = $tenantfqdn.Split('.')[0]
 	> 
     > #### Build Licensing SKUs
@@ -148,47 +202,20 @@ In this task, we will create new Azure AD users and assign licenses via PowerShe
 
 ---
 
-## Redeem Azure Pass
-[:arrow_up: Top](#lab-environment-configuration)
+# Sign up for Azure Subscription
 
-For several of the exercises in this lab series, you will require an active subscription.  We are providing an Azure Pass for this purpose.  You will be provided with an Azure Pass code to use with the instructions below.
+For several of the exercises in this lab series, you will require an active subscription.  You can sign up for a free subscription by following the instructions below.  If you have already used your free trial, you can sign up for a pay-as-you-go subscription as nothing in this lab will incur any charges.  Be aware that if you use the scanner to discover a large amount of data, you may incur Azure charges.
 
-### Redeeming a Microsoft Azure Pass Promo Code:
+### Creating an Azure free subscription
 
-1. [] Log into @lab.VirtualMachine(Client01).SelectLink using the password +++Pa$$w0rd+++
-2. [] Right-click on **Edge** in the taskbar and click on **New InPrivate window**.
+1. Browse to **https://azure.microsoft.com/en-us/free**
+2. Click the **Start Free** button in the middle of the screen.
 
-3. [] In the InPrivate window, navigate to ```https://www.microsoftazurepass.com```
+	>![Start Free](/Media/free.png)
+1. Sign in using your **Global Admin credentials** for your test tenant.
+1. Fill out the information to sign up for a free Azure subscription.
 
-4. [] Click the **Start** button to get started.
-
-	> !IMAGE[wdir7lb3.jpg](\Media\wdir7lb3.jpg)
-1. [] Log in using the credentials below.
-
-	```@lab.CloudCredential(139).Username```
-
-	```@lab.CloudCredential(139).Password``` 
-
-1. [] Click **Confirm** if the correct email address is listed.
-
-	> !IMAGE[teyx280d.jpg](\Media\teyx280d.jpg)
-7. [] Click in the Promo code box and type ```@lab.CloudCredential(215).PromoCode```, then click the **Claim Promo Code** button.
-
-	> !IMAGE[e1l35ko2.jpg](\Media\e1l35ko2.jpg)
-
-	>[!NOTE] It may take up to 5 minutes to process the redemption.
-
-8. [] Scroll to the bottom of the page and click **Next**.
-
-    > !IMAGE[ihrjazqi.jpg](\Media\ihrjazqi.jpg)
-
-	>[!NOTE] You can keep the pre-populated information.
-
-9. [] Check the box to agree to the terms and click **Sign up**.
-
-	> !IMAGE[k2a97g8e.jpg](\Media\k2a97g8e.jpg)
-
-	> [!NOTE] It may take a few minutes to process the request.
+	>![Sign UP](/Media/signup.png)
 
 ---
 ## Configuring Azure Log Analytics 
@@ -198,23 +225,23 @@ In order to collect log data from Azure Information Protection clients and servi
 
 1. [] In the Azure portal, type the word ```info``` into the **search bar** and press **Enter**, then click on **Azure Information Protection**. 
 
-	> !IMAGE[2598c48n.jpg](\Media\2598c48n.jpg)
+	> ![2598c48n.jpg](/Media/2598c48n.jpg)
 	
-	> [!HINT] If you do not see the search bar at the top of the portal, click on the **Magnifying Glass** icon to expand it.
+	> :memo: If you do not see the search bar at the top of the portal, click on the **Magnifying Glass** icon to expand it.
 	>
-	> !IMAGE[ny3fd3da.jpg](\Media\ny3fd3da.jpg)
+	> ![ny3fd3da.jpg](/Media/ny3fd3da.jpg)
 
-	> [!KNOWLEDGE] You should automatically be logged into the azure portal.  If not, navigate to ```https://portal.azure.com/``` and log in with the credentials below.
+	> :memo: You should automatically be logged into the azure portal.  If not, navigate to ```https://portal.azure.com/``` and log in with the credentials below.
 	>
-	>```@lab.CloudCredential(139).Username``` 
+	>```Global Admin Username``` 
 	>
-	>```@lab.CloudCredential(139).Password```
+	>```Global Admin Password```
 
 1. [] In the Azure Information Protection blade, under **Manage**, click **Configure analytics (preview)**.
 
 1. [] Next, click on **+ Create new workspace**.
 
-	> !IMAGE[qu68gqfd.jpg](\Media\qu68gqfd.jpg)
+	> ![qu68gqfd.jpg](/Media/qu68gqfd.jpg)
 1. [] In the Log analytics workspace using the values in the table below and click **OK**.
 
 	|||
@@ -223,18 +250,18 @@ In order to collect log data from Azure Information Protection clients and servi
 	|Resource Group|```AIP-RG```|
 	|Location|**East US** (Or a location near the event)|
 
-	> [!HINT] The OMS **Workspace name** must be **unique across all of Azure**. The name is not relevant for this lab, so feel free to use random characters.
+	> :memo: The OMS **Workspace name** must be **unique across all of Azure**. The name is not relevant for this lab, so feel free to use random characters.
 
-	^IMAGE[Open Screenshot](\Media\5butui15.jpg)
+	![Open Screenshot](/Media/5butui15.jpg)
 1. [] Next, back in the Configure analytics (preview) blade, **check the boxes** next to the **workspace** and next to **Enable Content Matches** and click **OK**.
 
-	> !IMAGE[1547437013585](\Media\1547437013585.png)
+	> ![1547437013585](/Media/1547437013585.png)
 
-	> [!KNOWLEDGE] Checking the box next to **Enable Content Matches** allows the **actual matched content** to be stored in the Azure Log Analytics workspace.  This could include many types of sensitive information such as SSN, Credit Card Numbers, and Banking Information.  This is important to understand and is why access to this ALA workspace should be locked down appropriately.
+	> :memo: Checking the box next to **Enable Content Matches** allows the **actual matched content** to be stored in the Azure Log Analytics workspace.  This could include many types of sensitive information such as SSN, Credit Card Numbers, and Banking Information.  This is important to understand and is why access to this ALA workspace should be locked down appropriately.
 
 1. [] Click **Yes**, in the confirmation dialog.
 
-	> !IMAGE[zgvmm4el.jpg](\Media\zgvmm4el.jpg)
+	> ![zgvmm4el.jpg](/Media/zgvmm4el.jpg)
 
 ---
 
@@ -244,7 +271,7 @@ In order to collect log data from Azure Information Protection clients and servi
 
 Even before configuring an AIP classification taxonomy, customers can scan and identify files containing sensitive information based on the built-in sensitive information types included in the Microsoft Classification Engine.  
 
-> !IMAGE[ahwj80dw.jpg](\Media\ahwj80dw.jpg)
+> ![ahwj80dw.jpg](/Media/ahwj80dw.jpg)
 
 Often, this can help drive an appropriate level of urgency and attention to the risk customers face if they delay rolling out AIP classification and protection.  
 
@@ -259,7 +286,7 @@ In this exercise, we will configure an AIP scanner profile in the Azure portal a
 
 The new AIP scanner preview client (1.45.32.0) and future GA releases will use the Azure portal central management user interface.  You are now able to manage multiple scanners without the need to sign in to the Windows computers running the scanner, set whether the scanner runs in Discovery or Enforcement mode, configure which sensitive information types are discovered and set repository related settings, like file types scanner, default label etc. Configuration from the Azure portal helps your deployments be more centralized, manageable, and scalable.
 
-> !IMAGE[ScannerUI](\Media\ScannerUI.png)
+> ![ScannerUI](/Media/ScannerUI.png)
 
 To make the admin’s life easier we created a repository default that can be set one time on the profile level and can be reused for all added repositories. You can still adjust settings for each repository in case you have a repository that requires some special treatment. 
 
@@ -269,35 +296,35 @@ The AIP scanner operational UI helps you run your operations remotely using a fe
 - Get scanner version and scanning statistics
 - Initiate on-demand incremental scans or run full rescans without having to sign in to the computers running the scanners
 
-> !IMAGE[ScannerUI2](\Media\ScannerUI2.png)
+> ![ScannerUI2](/Media/ScannerUI2.png)
 
 In this task, we will configure the repository default and add a new profile with the repositories we want to scan.
 
-1. [] On @lab.VirtualMachine(Client01).SelectLink, in the Azure Information Protection blade, under **Scanner**, click **Profiles**.
+1. [] On Client01, in the Azure Information Protection blade, under **Scanner**, click **Profiles**.
 
-	> !IMAGE[ScannerProfiles](\Media\ScannerProfiles.png)
+	> ![ScannerProfiles](/Media/ScannerProfiles.png)
 
-	> [!NOTE] If the Azure portal is not already open, navigate to ```https://aka.ms/ScannerProfiles``` and log in with the credentials below.
+	> :memo: If the Azure portal is not already open, navigate to ```https://aka.ms/ScannerProfiles``` and log in with the credentials below.
 	>
-	> ```@lab.CloudCredential(139).Username```
+	> ```Global Admin Username```
 	>
-	> ```@lab.CloudCredential(139).Password```
+	> ```Global Admin Password```
 
 1. [] In the Scanner Profiles blade, click the **+ Add** button.
 
 1. [] In the Add a new profile blade, enter ```East US``` for the **Proflie name**.
 
-	> [!Note] The default **Schedule** is set to **Manual**, and **Info types to be discovered** is set to **All**.
+	> :memo: The default **Schedule** is set to **Manual**, and **Info types to be discovered** is set to **All**.
 
 1. [] Under **Policy Enforcement**, set the **Enforce** switch to **Off**.
 
 1. [] Note the various additional settings, but **do not modify them**. Click **Save** to complete initial configuration.
 
-	> [!KNOWLEDGE] For additional information on the options available for the AIP scanner profile, 
+	> :memo: For additional information on the options available for the AIP scanner profile, 
 
 1. [] Once the save is complete, click on **Configure repositories**.
 
-	> !IMAGE[Configure Repository](\Media\ConfigRepo.png)
+	> ![Configure Repository](/Media/ConfigRepo.png)
 
 1. [] In the Repositories blade, click the **+ Add** button.
 
@@ -310,9 +337,9 @@ In this task, we will configure the repository default and add a new profile wit
 	|**Default label**|**Custom**|
 	||**Confidential \ All Employees**|
 	|**Default owner**|**Custom**|
-	||```@lab.CloudCredential(139).UserName```|
+	||```Global Admin UserName```|
 
-	> !IMAGE[Repo](\Media\Repo.png)
+	> ![Repo](/Media/Repo.png)
 
 1. [] Click **Save**.
 
@@ -332,19 +359,19 @@ In this task we will use a script to install the AIP scanner service and create 
 
 The first step in configuring the AIP Scanner is to install the service and connect the database.  This is done with the Install-AIPScanner cmdlet that is provided by the AIP Client software.  The AIPScanner service account has been pre-staged in Active Directory for convenience.
 
-1. [] Switch to @lab.VirtualMachine(Scanner01).SelectLink and log in using the Credentials below.
+1. [] Switch to Scanner01 and log in using the Credentials below.
 
-	> +++AIP Scanner+++
+	> ```AIP Scanner```
 	>
-	> +++Somepass1+++
+	> ```Somepass1```
 
 1. [] Open an **Administrative PowerShell Window** and type ```C:\Scripts\Install-ScannerPreview.ps1``` and press **Enter**. 
 
-	> [!NOTE] This script installs the AIP scanner Service using the **local domain user** account (Contoso\\AIPScanner) provisioned for the AIP Scanner. SQL Server is installed locally and the default instance will be used. The script will prompt for **Tenant Global Admin** credentials, the **AIP scanner Profile name**, and finally the AIP Scanner cloud account.  In a production environment, this will likely be the synced on-prem account, but for this demo we created a cloud only account during AAD Configuration earlier in the lab.
+	> :memo: This script installs the AIP scanner Service using the **local domain user** account (Contoso\\AIPScanner) provisioned for the AIP Scanner. SQL Server is installed locally and the default instance will be used. The script will prompt for **Tenant Global Admin** credentials, the **AIP scanner Profile name**, and finally the AIP Scanner cloud account.  In a production environment, this will likely be the synced on-prem account, but for this demo we created a cloud only account during AAD Configuration earlier in the lab.
 	>
 	> This script only works if logged on locally to the server as the AIP scanner Service Account, and the service account is a local administrator.  Please see the scripts at https://aka.ms/ScannerBlog for aadditional instructions.
 
-	> [!KNOWLEDGE]  This script will run the code below. This script is available online as Install-ScannerPreview.ps1 at https://aka.ms/labscripts
+	> :memo:  This script will run the code below. This script is available online as Install-ScannerPreview.ps1 at https://aka.ms/labscripts
 	> 
 	> Add-Type -AssemblyName Microsoft.VisualBasic
 	> 
@@ -391,23 +418,23 @@ The first step in configuring the AIP Scanner is to install the service and conn
 
 1. [] When prompted, enter the Global Admin credentials below:
 
-	> ```@lab.CloudCredential(139).Username```
+	> ```Global Admin Username```
 	>
-	> ```@lab.CloudCredential(139).Password```
+	> ```Global Admin Password```
 
 1. [] In the popup box, click **OK** to accept the default Profile value **East US**.
 
 1. [] When prompted, enter the AIP Scanner cloud credentials below:
 
-	> ```AIPScanner@@lab.CloudCredential(139).TenantName```
+	> ```AIPScanner@Your Tenant Name```
 	>
 	> ```Somepass1```
 
 1. [] In the Permissions requested window, click **Accept**.
 
-    > !IMAGE[nucv27wb.jpg](\Media\nucv27wb.jpg)
+    > ![nucv27wb.jpg](/Media/nucv27wb.jpg)
 
-	> [!NOTE] An AIP scanner Discovery scan will start directly after aquiring the application access token.
+	> :memo: An AIP scanner Discovery scan will start directly after aquiring the application access token.
 
 	> [!ALERT] If you see a **.NET exception**, press **OK**. This is due to SharePoint startup in the VM environment. This event **must be acknowledged** to complete the discovery scan.
 
@@ -421,62 +448,62 @@ One of the most powerful features of Azure Information Protection is the ability
 
 However, helping your users to properly classify and protect sensitive data at the time of creation is a more organic user experience that will achieve better results long term.  In this task, we will define some basic recommended and automatic conditions that will trigger based on certain types of sensitive data.
 
-1. [] Switch to @lab.VirtualMachine(Client01).SelectLink and log in with the password +++@lab.VirtualMachine(Client01).Password+++.
+1. [] Switch to Client01 and log in with the password Pa$$w0rd.
 
 1. [] In the **AIP blade**, under **Dashboards** on the left, click on **Data discovery (Preview)** to view the results of the discovery scan we performed previously.
 
-	> !IMAGE[Dashboard.png](\Media\Dashboard.png)
+	> ![Dashboard.png](/Media/Dashboard.png)
 
-	> [!KNOWLEDGE] Notice that there are no labeled or protected files shown at this time.  This uses the AIP P1 discovery functionality available with the AIP Scanner. Only the predefined Office 365 Sensitive Information Types are available with AIP P1 as Custom Sensitive Information Types require automatic conditions to be defined, which is an AIP P2 feature.
+	> :memo: Notice that there are no labeled or protected files shown at this time.  This uses the AIP P1 discovery functionality available with the AIP Scanner. Only the predefined Office 365 Sensitive Information Types are available with AIP P1 as Custom Sensitive Information Types require automatic conditions to be defined, which is an AIP P2 feature.
 
 	> [!ALERT] If no data is shown, it may still be processing. Continue with the lab and come back to see the results later.
 
 1. [] Under **Classifications** on the left, click **Labels** then expand **Confidential**, and click on **All Employees**.
 
-	^IMAGE[Open Screenshot](\Media\jyw5vrit.jpg)
+	![Open Screenshot](/Media/jyw5vrit.jpg)
 1. [] In the Label: All Employees blade, scroll down to the **Configure conditions for automatically applying this label** section, and click on **+ Add a new condition**.
 
-	> !IMAGE[cws1ptfd.jpg](\Media\cws1ptfd.jpg)
+	> ![cws1ptfd.jpg](/Media/cws1ptfd.jpg)
 1. [] In the Condition blade, in the **Select information types** search box, type ```EU``` and check the boxes next to the **items shown below**.
 
-	> !IMAGE[xaj5hupc.jpg](\Media\xaj5hupc.jpg)
+	> ![xaj5hupc.jpg](/Media/xaj5hupc.jpg)
 
 1. [] Click **Save** in the Condition blade and **OK** to the Save settings prompt.
 
-	^IMAGE[Open Screenshot](\Media\41o5ql2y.jpg)
+	![Open Screenshot](/Media/41o5ql2y.jpg)
 1. [] In the Labels: All Employees blade, in the **Configure conditions for automatically applying this label** section, click **Automatic**.
 
 1. [] Click **Save** in the Label: All Employees blade and **OK** to the Save settings prompt.
 
-	^IMAGE[Open Screenshot](\Media\rimezmh1.jpg)
+	![Open Screenshot](/Media/rimezmh1.jpg)
 1. [] Press the **X** in the upper right-hand corner to close the Label: All Employees blade.
 
-	^IMAGE[Open Screenshot](\Media\em124f66.jpg)
+	![Open Screenshot](/Media/em124f66.jpg)
 1. [] Next, expand **Highly Confidential** and click on the **All Employees** sub-label.
 
-	^IMAGE[Open Screenshot](\Media\2eh6ifj5.jpg)
+	![Open Screenshot](/Media/2eh6ifj5.jpg)
 1. [] In the Label: All Employees blade, scroll down to the **Configure conditions for automatically applying this label** section, and click on **+ Add a new condition**.
 
-	^IMAGE[Open Screenshot](\Media\8cdmltcj.jpg)
+	![Open Screenshot](/Media/8cdmltcj.jpg)
 1. [] In the Condition blade, in the search bar type ```credit``` and check the box next to **Credit Card Number**.
 
-	^IMAGE[Open Screenshot](\Media\9rozp61b.jpg)
+	![Open Screenshot](/Media/9rozp61b.jpg)
 1. [] Click **Save** in the Condition blade and **OK** to the Save settings prompt.
 
-	^IMAGE[Open Screenshot](\Media\ie6g5kta.jpg)
+	![Open Screenshot](/Media/ie6g5kta.jpg)
 1. [] In the Labels: All Employees blade, in the **Configure conditions for automatically applying this label** section, click **Automatic**.
 
-	> [!HINT] The policy tip is automatically updated when you switch the condition to Automatic.
+	> :memo: The policy tip is automatically updated when you switch the condition to Automatic.
 	>
-	> !IMAGE[245lpjvk.jpg](\Media\245lpjvk.jpg)
+	> ![245lpjvk.jpg](/Media/245lpjvk.jpg)
 
 1. [] Click **Save** in the Label: All Employees blade and **OK** to the Save settings prompt.
 
-	^IMAGE[Open Screenshot](\Media\gek63ks8.jpg)
+	![Open Screenshot](/Media/gek63ks8.jpg)
 
 1. [] Press the **X** in the upper right-hand corner to close the Label: All Employees blade.
 
-	^IMAGE[Open Screenshot](\Media\wzwfc1l4.jpg)
+	![Open Screenshot](/Media/wzwfc1l4.jpg)
 
 ---
 
@@ -494,21 +521,21 @@ Although we will not be demonstrating these capabilities in this lab, you can us
 
 In this task, we will activate the labels from the Azure Portal for use in the Security and Compliance Center.
 
-1. [] On @lab.VirtualMachine(Client01).SelectLink, in the AIP blade, click on **Unified labeling (Preview)**.
+1. [] On Client01, in the AIP blade, click on **Unified labeling (Preview)**.
 
-	> !IMAGE[Unified Labeling](\Media\Unified.png)
+	> ![Unified Labeling](/Media/Unified.png)
 
 3. [] Click **Activate** and **Yes**.
 
-	> !IMAGE[o0ahpimw.jpg](\Media\o0ahpimw.jpg)
+	> ![o0ahpimw.jpg](/Media/o0ahpimw.jpg)
 
-	>[!NOTE] You should see a message similar to the one below.
+	>:memo: You should see a message similar to the one below.
 	>
-	> !IMAGE[SCCMigration.png](\Media\SCCMigration.png) 
+	> ![SCCMigration.png](/Media/SCCMigration.png) 
 
 1. [] In a new tab, browse to ```https://protection.office.com/``` and click on **Classifications** and **Labels** to review the migrated labels. 
 
-	>[!NOTE] Keep in mind that now the SCC Sensitivity Labels have been activated, so any modifications, additions, or deletions will be syncronised to Azure Information Protection in the Azure Portal. There are some functional differences between the two sections (DLP in SCC, HYOK & Custom Permissions in AIP), so please be aware of this when modifying policies to ensure a consistent experience on clients. 
+	>:memo: Keep in mind that now the SCC Sensitivity Labels have been activated, so any modifications, additions, or deletions will be syncronised to Azure Information Protection in the Azure Portal. There are some functional differences between the two sections (DLP in SCC, HYOK & Custom Permissions in AIP), so please be aware of this when modifying policies to ensure a consistent experience on clients. 
 
 ---
 ## Deploying Policy in SCC
@@ -520,36 +547,36 @@ The previous step enabled the AIP labels for use in the Security and Compliance 
 
 2. [] In the Label policies pane, click **Publish labels**.
 
-	^IMAGE[Open Screenshot](\Media\SCC01.png)
+	![Open Screenshot](/Media/SCC01.png)
 3. [] On the Choose labels to publish page, click the **Choose labels to publish** link.
 
-	^IMAGE[Open Screenshot](\Media\SCC02.png)
+	![Open Screenshot](/Media/SCC02.png)
 4. [] In the Choose labels pane, click the + Add button.
 
-	^IMAGE[Open Screenshot](\Media\SCC03.png)
+	![Open Screenshot](/Media/SCC03.png)
 5. [] Click the box next to Display name to select all labels, then click the Add button.
 
-	^IMAGE[Open Screenshot](\Media\SCC04.png)
+	![Open Screenshot](/Media/SCC04.png)
 6. [] Click the Done button.
 
-	^IMAGE[Open Screenshot](\Media\SCC05.png)
+	![Open Screenshot](/Media/SCC05.png)
 7. [] Back on the Choose labels to publish page, click the Next button.
 
-	^IMAGE[Open Screenshot](\Media\SCC06.png)
+	![Open Screenshot](/Media/SCC06.png)
 8. [] On the Publish to users and groups page, notice that All users are included by default. If you were creating a scoped policy, you would choose specific users or groups to publish to. Click Next.
 
-	^IMAGE[Open Screenshot](\Media\SCC07.png)
+	![Open Screenshot](/Media/SCC07.png)
 9. [] On the Policy settings page, select the General label from the drop-down next to Apply this label by default to documents and email.
 10. [] Check the box next to Users must provide justification to remove a label or lower classification label and click the Next button.
 
-	> !IMAGE[Open Screenshot](\Media\SCC08.png)
+	> ![Open Screenshot](/Media/SCC08.png)
 
 11. [] In the Name textbox, type ```Global Policy``` and for the Description type ```This is the default global policy for all users.``` and click the Next button.
 
-	^IMAGE[Open Screenshot](\Media\SCC09.png)
+	![Open Screenshot](/Media/SCC09.png)
 12. [] Finally, on the Review your settings page, click the Publish button.
 
-	> !IMAGE[Open Screenshot](\Media\SCC10.png)
+	> ![Open Screenshot](/Media/SCC10.png)
 
 ---
 
@@ -572,13 +599,13 @@ In this exercise, we will run the AIP Scanner in enforce mode to classify and pr
 
 In this task, we will modify the AIP scanner Profile to enforce the conditions we set up and have it run on all files using the Start-AIPScan command.
 
-1. [] On @lab.VirtualMachine(Client01).SelectLink, return to **Scanner > Profiles** in the Azure Portal.
+1. [] On Client01, return to **Scanner > Profiles** in the Azure Portal.
 
-	> [!NOTE] If needed, navigate to ```https://aka.ms/ScannerProfiles``` and log in with the credentials below:
+	> :memo: If needed, navigate to ```https://aka.ms/ScannerProfiles``` and log in with the credentials below:
 	>
-	> ```@lab.CloudCredential(139).Username```
+	> ```Global Admin Username```
 	>
-	> ```@lab.CloudCredential(139).Password```
+	> ```Global Admin Password```
 
 2. [] Click on the **East US** profile.
 
@@ -590,23 +617,23 @@ In this task, we will modify the AIP scanner Profile to enforce the conditions w
 	|**Info types to be discovered**|**Policy only**|
 	|**Enforce**|**On**|
 	
-	> !IMAGE[Enforce](\media\Enforce.png)
+	> ![Enforce](/Media/Enforce.png)
 
-	> [!NOTE] These settings will cause the scanner to run continuously on the repositories, make the scanner only look for the sensitive information types we defined in conditions, and Enforce the labeling and protection of files based on those conditions. Leave all other settings in their current state.
+	> :memo: These settings will cause the scanner to run continuously on the repositories, make the scanner only look for the sensitive information types we defined in conditions, and Enforce the labeling and protection of files based on those conditions. Leave all other settings in their current state.
 
 1. [] Click **Save** then click the **X** to close the blade.
 
 1. [] Next, under Scanner, click on **Nodes**.
 
-	> !IMAGE[Nodes](\Media\Nodes.png)
+	> ![Nodes](/Media/Nodes.png)
 
 1. [] Highlight the row containing **Scanner01.Contoso.Azure**, and click **Scan now** in the command list above.
 
-	> !IMAGE[ScanNow](\Media\ScanNow.png)
+	> ![ScanNow](/Media/ScanNow.png)
 
 1. [] The previous command can take up to 5 minutes to run on the AIP scanner Server. Follow the commands below to accelerate the process.
 
-	1. [] Switch to @lab.VirtualMachine(Scanner01).SelectLink and log in with the password +++@lab.VirtualMachine(Scanner01).Password+++.
+	1. [] Switch to Scanner01 and log in with the password Somepass1.
 
 	1. [] In an Administrative PowerShell window, run the ```Start-AIPScan``` command.
 
@@ -617,7 +644,7 @@ In this task, we will modify the AIP scanner Profile to enforce the conditions w
 
 Now that we have Classified and Protected documents using the scanner, we can review the documents to see their change in status.
 
-1. [] Switch to @lab.VirtualMachine(Client01).SelectLink and log in with the password +++@lab.VirtualMachine(Client01).Password+++.
+1. [] Switch to Client01 and log in with the password Pa$$w0rd.
 
 2. [] Navigate to ```\\Scanner01.contoso.azure\documents```. 
 
@@ -627,32 +654,32 @@ Now that we have Classified and Protected documents using the scanner, we can re
 	>
 	>```Pa$$w0rd```
 
-	^IMAGE[Open Screenshot](\Media\hipavcx6.jpg)
+	![Open Screenshot](/Media/hipavcx6.jpg)
 3. [] Open one of the Contoso Purchasing Permissions documents.
 1. [] When prompted, provide the credentials below:
 
-	> ```EvanG@@lab.CloudCredential(139).TenantName```
+	> ```EvanG@Your Tenant Name```
 	>
 	> ```pass@word1```
 
 1. [] Click **Yes** to allow the organization to manage the device.
 	
-	> [!NOTE] Observe that the document is classified as Highly Confidential \ All Employees. 
+	> :memo: Observe that the document is classified as Highly Confidential \ All Employees. 
     >
-    > !IMAGE[s1okfpwu.jpg](\Media\HCAE.jpg)
+    > ![s1okfpwu.jpg](/Media/HCAE.jpg)
 
 4. [] Next, in the same documents folder, open one of the pdf files.
-5. [] When prompted by Adobe, enter ```EvanG@@lab.CloudCredential(139).TenantName``` and press **Next**.
+5. [] When prompted by Adobe, enter ```EvanG@Your Tenant Name``` and press **Next**.
 6. [] Check the box to save credentials and press **Yes**.
 1. [] Click **Accept** in the **Permissions requested** dialog.
 
-	> [!NOTE] The PDF will now open and display the sensitivity across the top of the document.
+	> :memo: The PDF will now open and display the sensitivity across the top of the document.
 
-	> [!Knowledge] The latest version of Acrobat Reader DC and the MIP Plugin have been installed on this system prior to the lab. Additionally, the sensitivity does not display by default in Adobe Acrobat Reader DC.  You must make the modifications below to the registry to make this bar display.
+	> :memo: The latest version of Acrobat Reader DC and the MIP Plugin have been installed on this system prior to the lab. Additionally, the sensitivity does not display by default in Adobe Acrobat Reader DC.  You must make the modifications below to the registry to make this bar display.
 	>
 	> In **HKEY_CURRENT_USER\Software\Adobe\Acrobat Reader\DC\MicrosoftAIP**, create a new **DWORD** value of **bShowDMB** and set the **Value** to **1**.
 	>
-	> !IMAGE[1547416250228](\Media\1547416250228.png)
+	> ![1547416250228](/Media/1547416250228.png)
 
 ---
 ## Reviewing the Dashboards 
@@ -660,41 +687,41 @@ Now that we have Classified and Protected documents using the scanner, we can re
 
 We can now go back and look at the dashboards and observe how they have changed.
 
-1. [] On @lab.VirtualMachine(Client01).SelectLink, open the browser that is logged into the Azure Portal.
+1. [] On Client01, open the browser that is logged into the Azure Portal.
 
 	> [!ALERT] Some of the content shown in this dashboard will not be present because we did not perform manual labeling.  This content has been left in to show the capabilities of the reports.
 
 1. [] Under **Dashboards**, click on **Usage report (Preview)**.
 
-	> [!NOTE] Observe that there are now entries from the AIP scanner, File Explorer, Microsoft Outlook, and Microsoft Word based on our activities in this lab. 
+	> :memo: Observe that there are now entries from the AIP scanner, File Explorer, Microsoft Outlook, and Microsoft Word based on our activities in this lab. 
 	>
-	> !IMAGE[Usage.png](\Media\newusage.png)
+	> ![Usage.png](/Media/newusage.png)
 
 2. [] Next, under dashboards, click on **Activity logs (preview)**.
    
-    > [!NOTE] We can now see activity from various users and clients including the AIP Scanner and specific users. 
+    > :memo: We can now see activity from various users and clients including the AIP Scanner and specific users. 
 	>
-	> !IMAGE[activity.png](\Media\activity.png)
+	> ![activity.png](/Media/activity.png)
 	
 1. [] Select the drop-down list under **Labels** and check the box next to **Highly Confidential \ All Employees**. 
 
-	> !IMAGE[activity2.png](\Media\activity2.png)
+	> ![activity2.png](/Media/activity2.png)
 
 1. [] Click on one of the entries to bring up the **Activity Details** panel.
 
-	> [!NOTE] In the Activity Details panel, you can see all of the details related to the classification, labeling, and protection of the file. The level of detail shown below is only available if you checked the box to Enable document content matches under Configure analytics (Preview). 
+	> :memo: In the Activity Details panel, you can see all of the details related to the classification, labeling, and protection of the file. The level of detail shown below is only available if you checked the box to Enable document content matches under Configure analytics (Preview). 
 	>
-	> !IMAGE[activity2.png](\Media\activity3.png)	
+	> ![activity2.png](/Media/activity3.png)	
 
 3. [] Finally, click on **Data discovery (Preview)**.
 
-	> [!NOTE] In the Data discovery dashboard, you can see a breakdown of how files are being protected and locations that have sensitive content.
+	> :memo: In the Data discovery dashboard, you can see a breakdown of how files are being protected and locations that have sensitive content.
 	>
-	> !IMAGE[Discovery.png](\Media\Discovery2.png)
+	> ![Discovery.png](/Media/Discovery2.png)
 	> 
 	> If you click on one of the locations, you can drill down and see the content that has been protected on that specific device or repository.
 	>
-	> !IMAGE[discovery2.png](\Media\discovery2b.png)
+	> ![discovery2.png](/Media/discovery2b.png)
 	
 
 ===
@@ -714,7 +741,7 @@ In this lab, you have successfully completed the exercises below covering the fo
 
 We hope you enjoyed this lab! Please fill out the survey and let us know what was valuable and what was not so that we may improve the experience for future labs. Thanks!
 
-> !IMAGE[cat](\Media\ninjacat.png)
+> ![cat](/Media/ninjacat.png)
 
 !INSTRUCTIONS[https://blogs.msdn.microsoft.com/oldnewthing/20160804-00/?p=94025][ninja-cat]
 https://blogs.msdn.microsoft.com/oldnewthing/20160804-00/?p=94025
