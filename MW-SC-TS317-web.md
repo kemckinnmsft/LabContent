@@ -90,7 +90,6 @@ https://aka.ms/AIPLabFeedback
 
 ---
 
-===
 
 # Azure Information Protection
 [:arrow_left: Home](#introduction)
@@ -119,7 +118,6 @@ This lab assumes that you are familiar with label and policy creation and that y
 
 ---
 
-===
 # Lab Environment Configuration
 [:arrow_left: Home](#introduction)
 
@@ -265,7 +263,6 @@ In order to collect log data from Azure Information Protection clients and servi
 
 ---
 
-===
 # Configuring AIP Scanner for Discovery
 [:arrow_left: Home](#azure-information-protection)
 
@@ -440,7 +437,6 @@ The first step in configuring the AIP Scanner is to install the service and conn
 
 ---
 
-===
 # Defining Automatic Conditions 
 [:arrow_left: Home](#azure-information-protection)
 
@@ -507,7 +503,6 @@ However, helping your users to properly classify and protect sensitive data at t
 
 ---
 
-===
 # Security and Compliance Center 
 [:arrow_left: Home](#azure-information-protection)
 
@@ -580,7 +575,6 @@ The previous step enabled the AIP labels for use in the Security and Compliance 
 
 ---
 
-===
 # Classification, Labeling, and Protection with the Azure Information Protection Scanner 
 [:arrow_left: Home](#azure-information-protection)
 
@@ -724,7 +718,6 @@ We can now go back and look at the dashboards and observe how they have changed.
 	> ![discovery2.png](/Media/discovery2b.png)
 	
 
-===
 # AIP Lab Complete 
 [:arrow_left: Home](#azure-information-protection)
 
