@@ -446,7 +446,7 @@ However, helping your users to properly classify and protect sensitive data at t
 
 1. Switch to Client01 and log in with the password Pa$$w0rd.
 
-1. In the **AIP blade**, under **Dashboards** on the left, click on **Data discovery (Preview)** to view the results of the discovery scan we performed previously.
+1. In the **AIP blade**, under **Analytics** on the left, click on **Data discovery (Preview)** to view the results of the discovery scan we performed previously.
 
 	> ![Dashboard.png](/Media/Dashboard.png)
 
@@ -687,13 +687,13 @@ We can now go back and look at the dashboards and observe how they have changed.
 
 	> :warning: Some of the content shown in this dashboard will not be present because we did not perform manual labeling.  This content has been left in to show the capabilities of the reports.
 
-1. Under **Dashboards**, click on **Usage report (Preview)**.
+1. Under **Analytics**, click on **Usage report (Preview)**.
 
 	> :memo: Observe that there are now entries from the AIP scanner, File Explorer, Microsoft Outlook, and Microsoft Word based on our activities in this lab. 
 	>
 	> ![Usage.png](/Media/newusage.png)
 
-2. Next, under dashboards, click on **Activity logs (preview)**.
+2. Next, under Analytics, click on **Activity logs (preview)**.
    
     > :memo: We can now see activity from various users and clients including the AIP Scanner and specific users. 
 	>
