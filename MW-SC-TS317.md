@@ -231,7 +231,7 @@ In order to collect log data from Azure Information Protection clients and servi
 
 	> !IMAGE[1547437013585](\Media\1547437013585.png)
 
-	> [!KNOWLEDGE] Checking the box next to **Enable Content Matches** allows the **actual matched content** to be stored in the Azure Log Analytics workspace.  This could include many types of sensitive information such as SSN, Credit Card Numbers, and Banking Information.  This is important to understand and is why access to this ALA workspace should be locked down appropriately.
+	> [!KNOWLEDGE] Checking the box next to **Enable Content Matches** allows the **actual matched content** to be stored in the Azure Log Analytics workspace.  This could include many types of sensitive information such as SSN, Credit Card Numbers, and Banking Information.  This option is typically used during testing of automatic conditions and not widely used in production settings due to the sensitive nature of the collected data.  If this is used in a production setting, extreme caution should be taken with securing access to this workspace.
 
 1. [] Click **Yes**, in the confirmation dialog.
 
@@ -460,9 +460,9 @@ However, helping your users to properly classify and protect sensitive data at t
 
 	> !IMAGE[Dashboard.png](\Media\Dashboard.png)
 
-	> [!KNOWLEDGE] Notice that there are no labeled or protected files shown at this time.  This uses the AIP P1 discovery functionality available with the AIP Scanner. Only the predefined Office 365 Sensitive Information Types are available with AIP P1 as Custom Sensitive Information Types require automatic conditions to be defined, which is an AIP P2 feature.
+	> [!KNOWLEDGE] The screenshot above shows a discovery only scan. Notice that there are no labeled or protected files shown at this time.  This uses the AIP P1 discovery functionality available with the AIP Scanner. Only the predefined Office 365 Sensitive Information Types are available with AIP P1 as Custom Sensitive Information Types require automatic conditions to be defined, which is an AIP P2 feature.
 
-	> [!ALERT] If no data is shown, it may still be processing. Continue with the lab and come back to see the results later.
+	> [!ALERT] It is very likely that the dashboard in your lab will not be populated at this point as you have just started the discovery scan. Continue with the lab and we will come back to see the results later.
 
 1. [] Under **Classifications** on the left, click **Labels** then expand **Confidential**, and click on **All Employees**.
 
@@ -759,5 +759,5 @@ We hope you enjoyed this lab! Please fill out the survey and let us know what wa
 > !IMAGE[cat](\Media\ninjacat.png)
 
 !INSTRUCTIONS[https://blogs.msdn.microsoft.com/oldnewthing/20160804-00/?p=94025][ninja-cat]
-https://blogs.msdn.microsoft.com/oldnewthing/20160804-00/?p=94025
+[https://blogs.msdn.microsoft.com/oldnewthing/20160804-00/?p=94025](https://blogs.msdn.microsoft.com/oldnewthing/20160804-00/?p=94025)
 
