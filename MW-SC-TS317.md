@@ -227,7 +227,6 @@ In order to collect log data from Azure Information Protection clients and servi
 
 	> [!HINT] The OMS **Workspace name** must be **unique across all of Azure**. The name is not relevant for this lab, so feel free to use random characters.
 
-	^IMAGE[Open Screenshot](\Media\5butui15.jpg)
 1. [] Next, back in the Configure analytics (preview) blade, **check the boxes** next to the **workspace** and next to **Enable Content Matches** and click **OK**.
 
 	> !IMAGE[1547437013585](\Media\1547437013585.png)
