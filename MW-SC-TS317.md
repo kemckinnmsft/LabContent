@@ -223,7 +223,7 @@ In order to collect log data from Azure Information Protection clients and servi
 	|-----|-----|
 	|OMS Workspace|**Type a unique Workspace Name**|
 	|Resource Group|```AIP-RG```|
-	|Location|**East US**|
+	|Location|**East US**| 
 
 	> [!HINT] The OMS **Workspace name** must be **unique across all of Azure**. The name is not relevant for this lab, so feel free to use random characters.
 
